@@ -10,10 +10,17 @@
 </div>
 <p align="center">
 
-![SIH](https://img.shields.io/badge/SIH_2026-SIH26186-1E88E5?style=for-the-badge)
-![AI](https://img.shields.io/badge/AI-Predictive_Welfare-6C5CE7?style=for-the-badge)
-![Domain](https://img.shields.io/badge/Domain-Uniformed_Forces-2E7D32?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Prototype-F39C12?style=for-the-badge)
+<img src="https://img.shields.io/badge/SIH_2026-SIH26186-111827?style=for-the-badge&labelColor=0F172A" />
+<img src="https://img.shields.io/badge/AI-Predictive_Welfare-4F46E5?style=for-the-badge&labelColor=0F172A" />
+<img src="https://img.shields.io/badge/ML-XGBoost-059669?style=for-the-badge&labelColor=0F172A" />
+<img src="https://img.shields.io/badge/XAI-SHAP-7C3AED?style=for-the-badge&labelColor=0F172A" />
+
+<br/>
+
+<img src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&labelColor=0F172A" />
+<img src="https://img.shields.io/badge/Frontend-React-61DAFB?style=for-the-badge&labelColor=0F172A" />
+<img src="https://img.shields.io/badge/Database-PostgreSQL-336791?style=for-the-badge&labelColor=0F172A" />
+<img src="https://img.shields.io/badge/Deployment-Vercel-FFFFFF?style=for-the-badge&labelColor=0F172A" />
 
 </p>
 ---
