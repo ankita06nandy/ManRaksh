@@ -30,7 +30,7 @@
 <img src="https://img.shields.io/badge/THEME-MedTech_%7C_BioTech_%7C_HealthTech-EC4899?style=flat-square&labelColor=0F172A" />
 
 </p>
----
+
 
 # Project Overview 
 The proposed MANRAKSHA system is an AI-powered personnel welfare platform that analyzes organizational and voluntarily provided wellness data to identify early indicators of stress and burnout.
