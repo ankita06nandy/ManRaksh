@@ -8,7 +8,8 @@
 </p>
 
 </div>
-<p align="center">
+
+<div align="center">
 
 ![AI](https://img.shields.io/badge/AI-Predictive_Welfare-4F7942?style=flat-square)
 ![ML](https://img.shields.io/badge/ML-XGBoost-6B8E4A?style=flat-square)
@@ -16,11 +17,9 @@
 ![Frontend](https://img.shields.io/badge/Frontend-React-4F7942?style=flat-square)
 ![Backend](https://img.shields.io/badge/Backend-FastAPI-5F8060?style=flat-square)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL-6B8E4A?style=flat-square)
-![Deployment](https://img.shields.io/badge/Deployment-Vercel-555555?style=flat-square)
+![Deployment](https://img.shields.io/badge/Deployment-Vercel-4F7942?style=flat-square)
 
-</p>
-
-<p align="center">
+<br>
 
 ![SIH](https://img.shields.io/badge/SIH-2026-1976D2?style=flat-square)
 ![Problem Statement](https://img.shields.io/badge/PS-SIH26186-5E35B1?style=flat-square)
@@ -28,7 +27,7 @@
 ![Organization](https://img.shields.io/badge/Organization-Ministry_of_Home_Affairs-6A1B9A?style=flat-square)
 ![Theme](https://img.shields.io/badge/Theme-MedTech_|_BioTech_|_HealthTech-EF6C00?style=flat-square)
 
-</p>
+</div>
 
 
 # Project Overview 
