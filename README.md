@@ -10,25 +10,23 @@
 </div>
 <p align="center">
 
-<img src="https://img.shields.io/badge/AI-Predictive_Welfare-4F46E5?style=for-the-badge&labelColor=B5CF78" />
-<img src="https://img.shields.io/badge/ML-XGBoost-059669?style=for-the-badge&labelColor=8FAF55" />
-<img src="https://img.shields.io/badge/XAI-SHAP-7C3AED?style=for-the-badge&labelColor=F4511E" />
-
+![AI](https://img.shields.io/badge/AI-Predictive_Welfare-4B6B4B?style=flat-square)
+![ML](https://img.shields.io/badge/ML-XGBoost-6B7F5A?style=flat-square)
+![XAI](https://img.shields.io/badge/XAI-SHAP-7A7A7A?style=flat-square)
 <br/>
 
-<img src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&labelColor=B5CF78" />
-<img src="https://img.shields.io/badge/Frontend-React-61DAFB?style=for-the-badge&labelColor=8FAF55" />
-<img src="https://img.shields.io/badge/Database-PostgreSQL-336791?style=for-the-badge&labelColor=B5CF78" />
-<img src="https://img.shields.io/badge/Deployment-Vercel-FFFFFF?style=for-the-badge&labelColor=8FAF55" />
+![Frontend](https://img.shields.io/badge/Frontend-React-5C765C?style=flat-square)
+![Backend](https://img.shields.io/badge/Backend-FastAPI-4B6B4B?style=flat-square)
+![Database](https://img.shields.io/badge/Database-PostgreSQL-6B7F5A?style=flat-square)
+![Deployment](https://img.shields.io/badge/Deployment-Vercel-555555?style=flat-square)
 
 </p>
 <p align="center">
 
-<img src="https://img.shields.io/badge/SIH_2026-SIH26186-2563EB?style=flat-square&labelColor=3F703D" />
-<img src="https://img.shields.io/badge/CATEGORY-Software-10B981?style=flat-square&labelColor=B5CF78" />
-<img src="https://img.shields.io/badge/ORGANIZATION-Ministry_of_Home_Affairs-8B5CF6?style=flat-square&labelColor=F4511E" />
-<img src="https://img.shields.io/badge/THEME-MedTech_%7C_BioTech_%7C_HealthTech-EC4899?style=flat-square&labelColor=8FAF55" />
-
+![SIH 2026](https://img.shields.io/badge/SIH_2026-SIH26186-4B6B4B?style=flat-square)
+![Category](https://img.shields.io/badge/Category-Software-6B7F5A?style=flat-square)
+![Organization](https://img.shields.io/badge/Organization-Ministry_of_Home_Affairs-4B6B4B?style=flat-square)
+![Theme](https://img.shields.io/badge/Theme-MedTech_|_BioTech_|_HealthTech-6B7F5A?style=flat-square)
 </p>
 
 
