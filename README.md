@@ -13,7 +13,6 @@
 
 ![AI](https://img.shields.io/badge/AI-Predictive_Welfare-4F7942?style=flat-square)
 ![ML](https://img.shields.io/badge/ML-XGBoost-6B8E4A?style=flat-square)
-![XAI](https://img.shields.io/badge/XAI-SHAP-7A7A7A?style=flat-square)
 ![Frontend](https://img.shields.io/badge/Frontend-React-4F7942?style=flat-square)
 ![Backend](https://img.shields.io/badge/Backend-FastAPI-5F8060?style=flat-square)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL-6B8E4A?style=flat-square)
