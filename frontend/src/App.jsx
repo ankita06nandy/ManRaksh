@@ -340,7 +340,11 @@ function LoginSignup({ onClose, onLogin }) {
 
       <div className="auth-container">
         <div className="auth-header">
-          <div className="auth-logo">MR</div>
+          <img
+            src="/ManRaksha_logo.png"
+            alt="ManRaksha logo"
+            className="auth-logo-image"
+           />
           <h1>ManRaksha</h1>
           <p>Personnel Welfare & Risk Intelligence</p>
         </div>

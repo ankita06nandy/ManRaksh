@@ -276,19 +276,12 @@ button:focus, a:focus{outline:3px solid rgba(44,94,98,0.12);outline-offset:2px}
   margin-bottom: 32px;
 }
 
-.auth-logo {
-  width: 58px;
-  height: 58px;
+.auth-logo-image {
+  width: 72px;
+  height: 72px;
   margin: 0 auto 14px;
-  border-radius: 16px;
-  background: var(--accent);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 18px;
-  letter-spacing: 1px;
+  object-fit: contain;
+  display: block;
 }
 
 .auth-header h1 {
