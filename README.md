@@ -1,339 +1,461 @@
-<div align="center">
-<img src="https://github.com/ankita06nandy/ManRaksha/blob/main/frontend/public/ManRaksha_logo.png" alt="ManRaksha Logo" width="150">
-<h1>MANRAKSHA</h1>
-<h3>AI-Based Predictive Personnel Stress &amp; Welfare Monitoring System</h3>
+# AI-Based Predictive Personnel Stress and Welfare Monitoring System
 
-<p>
-  <b>“Detect Early. Support Privately. Protect Always.”</b>
-</p>
+## Problem Statement
 
-</div>
+Uniformed personnel work in demanding environments that may involve prolonged duty hours, irregular schedules, operational pressure, deployment, limited recovery time, and other occupational stressors.
 
-<div align="center">
+Conventional welfare mechanisms may rely heavily on self-reporting or manual observation, which can make it difficult to identify emerging patterns at an early stage.
 
-![AI](https://img.shields.io/badge/AI-Predictive_Welfare-4F7942?style=flat-square)
-![ML](https://img.shields.io/badge/ML-XGBoost-6B8E4A?style=flat-square)
-![Frontend](https://img.shields.io/badge/Frontend-React-4F7942?style=flat-square)
-![Backend](https://img.shields.io/badge/Backend-FastAPI-5F8060?style=flat-square)
-![Database](https://img.shields.io/badge/Database-PostgreSQL-6B8E4A?style=flat-square)
-![Deployment](https://img.shields.io/badge/Deployment-Vercel-4F7942?style=flat-square)
+The proposed system uses **Artificial Intelligence and Machine Learning to identify patterns associated with personnel stress and welfare risk**, providing early warnings and decision-support information to authorised personnel.
 
-<br>
+The system is intended to support welfare monitoring and early intervention while keeping final welfare decisions under appropriate human supervision.
 
-![SIH](https://img.shields.io/badge/SIH-2026-1976D2?style=flat-square)
-![Problem Statement](https://img.shields.io/badge/PS-SIH26186-5E35B1?style=flat-square)
-![Category](https://img.shields.io/badge/Category-Software-2E7D32?style=flat-square)
-![Organization](https://img.shields.io/badge/Organization-Ministry_of_Home_Affairs-6A1B9A?style=flat-square)
-![Theme](https://img.shields.io/badge/Theme-MedTech_|_BioTech_|_HealthTech-EF6C00?style=flat-square)
+---
 
-</div>
+# Proposed Solution
 
+The proposed platform integrates personnel information, workload patterns, duty and deployment information, leave patterns, and voluntary wellness inputs into a secure analytical pipeline.
 
-# Project Overview 
-The proposed MANRAKSHA system is an AI-powered personnel welfare platform that analyzes organizational and voluntarily provided wellness data to identify early indicators of stress and burnout.
+The system:
 
-## Key components:
-HR, duty, workload and deployment data analysis.
-Secure mobile-based wellness self-assessment.
-Optional biometric/wearable data where authorized.
-AI-based stress, burnout and fatigue detection.
-Predictive risk scoring and stress trajectory analysis.
-Explainable welfare alerts for authorized officers.
-Personalized recommendations for counselling, rest and workload balancing.
-Privacy-preserving architecture with encryption, anonymization and RBAC.
-## Core principle: 
-Predict the need for support, not the fitness of the individual.
+* Collects relevant personnel and operational indicators
+* Preprocesses and validates incoming data
+* Extracts meaningful features
+* Uses an AI/ML model to identify stress and welfare-risk patterns
+* Classifies the detected risk level
+* Identifies contributing factors using explainable AI
+* Generates appropriate early-warning alerts
+* Provides welfare-oriented recommendations
+* Allows authorised personnel to review the information
+* Supports human-led welfare intervention
 
-# Key Features 
-*Stress Trajectory:* Tracks changing risk instead of relying on one-time assessments.
-*Predictive Analytics:* Identifies rising risk before it becomes critical.
-*Voluntary Wellness App:* Enables confidential self-assessment.
-*Optional Biometrics:* Supports authorized physiological/wearable data.
-*Explainable AI:* Shows factors influencing risk predictions.
-*Personalized Interventions:* Recommends appropriate welfare actions.
-*Automated Alerts:* Provides timely notifications to authorized personnel.
-*Privacy-by-Design:* Protects sensitive personnel information.
-*Human-in-the-Loop:* AI supports welfare officers rather than replacing human judgment.
+The system does **not** treat an AI prediction as a medical diagnosis. Its purpose is to provide an early-warning and decision-support mechanism.
 
-# System Architechure 
-<table>
-  <tr>
-    <th colspan="2">DATA PROCESSING LAYER</th>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      Cleaning & Validation • Feature Engineering • Anonymization • Missing-Value Handling
-    </td>
-  </tr>
+---
 
-  <tr>
-    <th colspan="2">⬇️</th>
-  </tr>
+# Solution Architecture
 
-  <tr>
-    <th colspan="2">AI / ML ENGINE</th>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      <b>Stress & Welfare Risk Prediction Model</b><br>
-      Risk Score + Trend → Low / Moderate / High
-    </td>
-  </tr>
+```mermaid
+flowchart TB
 
-  <tr>
-    <th colspan="2">⬇️</th>
-  </tr>
+    subgraph DATA["1. DATA COLLECTION"]
+        D1["Personnel Profile Data"]
+        D2["Duty & Workload Data"]
+        D3["Leave & Deployment Data"]
+        D4["Wellness / Self-Assessment"]
+        D5["Operational & Behavioural Indicators"]
+    end
 
-  <tr>
-    <th>EXPLAINABLE AI LAYER</th>
-    <th>EARLY WARNING SYSTEM</th>
-  </tr>
-  <tr>
-    <td>
-      • Why is risk increasing?<br>
-      • Key contributing factors<br>
-      • Risk trend explanation
-    </td>
-    <td>
-      • Risk threshold detection<br>
-      • Trend-based alerts<br>
-      • Priority identification
-    </td>
-  </tr>
+    subgraph SECURITY["2. SECURE DATA INGESTION"]
+        S1["Data Validation"]
+        S2["Anonymisation / Pseudonymisation"]
+        S3["Authentication & Access Control"]
+    end
 
-  <tr>
-    <th colspan="2">⬇️</th>
-  </tr>
+    subgraph PROCESSING["3. DATA PROCESSING"]
+        P1["Data Cleaning"]
+        P2["Missing Value Handling"]
+        P3["Normalisation"]
+        P4["Feature Engineering"]
+        P5["Pattern Extraction"]
+    end
 
-  <tr>
-    <th colspan="2">WELFARE OFFICER DASHBOARD</th>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      Risk Overview • Personnel Trends • Contributing Factors • Priority Attention
-    </td>
-  </tr>
+    subgraph ML["4. AI / ML ENGINE"]
+        M1["Predictive Model"]
+        M2["Risk Classification"]
+        M3["Explainable AI"]
+        M4["Confidence & Pattern Analysis"]
+    end
 
-  <tr>
-    <th colspan="2">⬇️</th>
-  </tr>
+    subgraph WARNING["5. EARLY-WARNING SYSTEM"]
+        W1["Risk Level"]
+        W2["Contributing Factors"]
+        W3["Early-Warning Alert"]
+        W4["Welfare Recommendation"]
+    end
 
-  <tr>
-    <th colspan="2">PERSONNEL WELLNESS APP</th>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      Voluntary Self-Assessment • Wellness Check-ins • Personalized Recommendations
-    </td>
-  </tr>
-</table>
+    subgraph APPLICATION["6. APPLICATION"]
+        A1["Personnel Dashboard"]
+        A2["Wellness Check-In"]
+        A3["Welfare Dashboard"]
+        A4["Support Resources"]
+    end
 
-# User Roles and Access 
+    subgraph HUMAN["7. HUMAN OVERSIGHT"]
+        H1["Authorised Human Review"]
+        H2["Welfare Decision"]
+        H3["Human-Led Intervention"]
+    end
 
-<table>
-<tr>
+    subgraph MONITORING["8. MONITORING & GOVERNANCE"]
+        G1["Audit Logs"]
+        G2["Model Performance Monitoring"]
+        G3["Data Drift Monitoring"]
+        G4["Model Improvement"]
+    end
 
-<td align="center" width="33%">
+    D1 --> S1
+    D2 --> S1
+    D3 --> S1
+    D4 --> S1
+    D5 --> S1
 
-### Personnel
+    S1 --> S2
+    S2 --> S3
+    S3 --> P1
 
-Access personal wellness insights, self-assessments, support resources and wellbeing guidance.
+    P1 --> P2
+    P2 --> P3
+    P3 --> P4
+    P4 --> P5
 
-<br>
+    P5 --> M1
+    M1 --> M2
+    M1 --> M3
+    M3 --> M4
 
-</td>
+    M2 --> W1
+    M3 --> W2
+    M4 --> W3
+    W1 --> W3
+    W2 --> W3
+    W3 --> W4
 
-<td align="center" width="33%">
+    W1 --> A1
+    W4 --> A2
+    W4 --> A4
+    W3 --> A3
 
-###  Welfare Officer
+    A3 --> H1
+    A1 --> H1
+    H1 --> H2
+    H2 --> H3
 
-Monitor welfare indicators, understand risk factors and support early human-led intervention.
+    H3 --> G1
+    G1 --> G2
+    G2 --> G3
+    G3 --> G4
+    G4 --> M1
+```
 
-<br>
+---
 
-</td>
+# System Workflow
 
-<td align="center" width="33%">
+The system follows a continuous pipeline from data collection to human-led welfare support.
 
-###  Administrator
+```mermaid
+flowchart LR
 
-View aggregate welfare trends, workload patterns and system-level analytics.
+    C["Data Collection"]
+    P["Preprocessing"]
+    F["Feature Engineering"]
+    M["AI / ML Prediction"]
+    R["Risk Classification"]
+    X["Explainable Risk Factors"]
+    A["Early-Warning Alert"]
+    H["Human Review"]
+    W["Welfare Support"]
 
-<br>
+    C --> P
+    P --> F
+    F --> M
+    M --> R
+    R --> X
+    X --> A
+    A --> H
+    H --> W
+```
 
-</td>
+### Workflow Stages
 
-</tr>
-</table>
+| Stage                   | Function                                                                         |
+| ----------------------- | -------------------------------------------------------------------------------- |
+| **Data Collection**     | Collect relevant personnel, workload, deployment, leave, and wellness indicators |
+| **Preprocessing**       | Clean, validate, normalise, and prepare the data                                 |
+| **Feature Engineering** | Convert raw information into meaningful analytical features                      |
+| **AI/ML Prediction**    | Identify patterns associated with stress and welfare risk                        |
+| **Risk Classification** | Categorise the predicted level of concern                                        |
+| **Explainability**      | Identify the major factors contributing to the prediction                        |
+| **Early Warning**       | Notify authorised users when elevated patterns are detected                      |
+| **Human Review**        | Allow authorised personnel to interpret the situation in context                 |
+| **Welfare Support**     | Enable appropriate human-led intervention or support                             |
 
+---
+
+# AI / ML Component
+
+The AI/ML layer forms the predictive core of the system.
+
+It analyses relevant features such as:
+
+| Feature Category        | Examples                                                |
+| ----------------------- | ------------------------------------------------------- |
+| **Workload**            | Duty hours, workload frequency, overtime patterns       |
+| **Duty Schedule**       | Shift irregularity, night-duty frequency                |
+| **Deployment**          | Deployment duration, recent deployment activity         |
+| **Leave**               | Leave frequency, gaps between leave periods             |
+| **Recovery**            | Rest and recovery patterns                              |
+| **Wellness**            | Self-reported stress, fatigue, sleep-related indicators |
+| **Operational Factors** | Relevant changes in operational conditions              |
+| **Historical Patterns** | Previous anonymised observations                        |
+
+The exact features used will depend on the availability, quality, and suitability of the dataset.
+
+### Machine Learning Pipeline
+
+```mermaid
+flowchart TB
+
+    D["Training Dataset"]
+    C["Data Cleaning"]
+    F["Feature Engineering"]
+    T["Model Training"]
+    V["Validation & Evaluation"]
+    P["Trained Model"]
+
+    N["New Data"]
+    N2["Preprocessing"]
+    I["Prediction"]
+    E["Explainable AI"]
+    R["Risk Classification"]
+
+    D --> C
+    C --> F
+    F --> T
+    T --> V
+    V --> P
+
+    N --> N2
+    N2 --> P
+    P --> I
+    I --> E
+    I --> R
+```
+
+---
+
+# Risk Classification
+
+The system converts model outputs into understandable risk categories.
+
+| Risk Level        | System Interpretation                                  | Possible System Response                            |
+| ----------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| **Low**           | No significant elevated-risk pattern detected          | Continue routine monitoring                         |
+| **Moderate**      | Some indicators may require attention                  | Offer a voluntary wellness check-in                 |
+| **Elevated**      | Multiple indicators suggest increased welfare concern  | Generate an authorised early-warning alert          |
+| **High Priority** | Strong combination of indicators requires human review | Prompt authorised personnel to review the situation |
+
+The risk level is an **AI-generated welfare indicator**, not a medical diagnosis.
+
+---
+
+# Explainable AI
+
+A prediction should not be presented as an unexplained number.
+
+The system can provide the factors that contributed to an elevated prediction.
+
+For example:
+
+| Output                  | Example                                   |
+| ----------------------- | ----------------------------------------- |
+| **Risk Level**          | Elevated                                  |
+| **Contributing Factor** | Increased workload                        |
+| **Contributing Factor** | Irregular duty schedule                   |
+| **Contributing Factor** | Reduced recovery period                   |
+| **Contributing Factor** | Recent deployment activity                |
+| **Suggested Next Step** | Consider a confidential wellness check-in |
+
+This provides authorised users with context around the model output and makes the system more transparent.
+
+---
+
+# Early-Warning System
+
+```mermaid
+flowchart TB
+
+    P["AI Prediction"]
+    R{"Risk Level"}
+
+    L["Low"]
+    M["Moderate"]
+    E["Elevated"]
+    H["High Priority"]
+
+    L1["Routine Monitoring"]
+    M1["Wellness Check-In"]
+    E1["Authorised Early Warning"]
+    H1["Human Review"]
+
+    P --> R
+
+    R --> L
+    R --> M
+    R --> E
+    R --> H
+
+    L --> L1
+    M --> M1
+    E --> E1
+    H --> H1
+```
+
+The purpose of the warning mechanism is to identify potentially concerning patterns **before they become difficult to address**, while avoiding automatic conclusions about an individual's health or fitness.
+
+---
+
+# Human-in-the-Loop
+
+Human oversight is a central part of the proposed system.
+
+```mermaid
+flowchart LR
+
+    A["AI Detects Pattern"]
+    B["AI Explains Factors"]
+    C["System Generates Alert"]
+    D["Authorised Human Reviews"]
+    E["Human Makes Decision"]
+    F["Human-Led Welfare Support"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+```
+
+The system provides information and recommendations, while authorised personnel retain responsibility for deciding whether any intervention is appropriate.
+
+The system should not independently:
+
+* Diagnose a mental-health condition
+* Make disciplinary decisions
+* Penalise personnel based solely on a prediction
+* Force counselling or support
+* Initiate consequential intervention without appropriate human review
+
+---
+
+# Application Modules
+
+| Module                   | Purpose                                                             |
+| ------------------------ | ------------------------------------------------------------------- |
+| **Authentication**       | Secure access to the platform                                       |
+| **Personnel Dashboard**  | Display individual wellness information                             |
+| **Wellness Check-In**    | Allow personnel to voluntarily provide current wellness information |
+| **Risk Analysis**        | Display AI-generated risk indicators                                |
+| **Explainability**       | Show relevant contributing factors                                  |
+| **Early-Warning Alerts** | Notify authorised users of elevated patterns                        |
+| **Welfare Dashboard**    | Provide authorised welfare personnel with relevant insights         |
+| **Support Resources**    | Provide access to appropriate welfare resources                     |
+| **Trend Monitoring**     | Display changes in relevant indicators over time                    |
+
+---
+
+# Privacy & Security
+
+Personnel welfare information can be sensitive. The system therefore incorporates privacy and security throughout the data pipeline.
+
+```mermaid
+flowchart TB
+
+    U["User / Data Source"]
+    A["Authentication"]
+    R["Role-Based Access Control"]
+    V["Data Validation"]
+    P["Anonymisation / Pseudonymisation"]
+    E["Encrypted Storage"]
+    M["Controlled ML Processing"]
+    O["Role-Based Output"]
+    L["Audit Logging"]
+
+    U --> A
+    A --> R
+    R --> V
+    V --> P
+    P --> E
+    E --> M
+    M --> O
+    O --> L
+```
+
+### Security Measures
+
+* Authentication and authorisation
+* Role-Based Access Control
+* Secure data transmission
+* Encryption of sensitive information
+* Data minimisation
+* Anonymisation or pseudonymisation where appropriate
+* Controlled access to welfare information
+* Audit logging
+* Privacy-aware model development
+
+---
 
 # Technology Stack
 
-<table>
-  <tr>
-    <th>Layer</th>
-    <th>Technologies</th>
-  </tr>
+| Layer                | Proposed Technology                 |
+| -------------------- | ----------------------------------- |
+| **Frontend**         | React / Next.js                     |
+| **Styling**          | HTML, CSS, JavaScript               |
+| **Backend**          | Node.js / Express or Python FastAPI |
+| **Machine Learning** | Python                              |
+| **ML Libraries**     | Pandas, NumPy, Scikit-learn         |
+| **Database**         | MongoDB                             |
+| **Authentication**   | JWT / Secure Authentication         |
+| **Communication**    | REST APIs                           |
+| **Deployment**       | Cloud-based deployment              |
+| **Version Control**  | Git & GitHub                        |
 
-  <tr>
-    <td><b>Frontend</b></td>
-    <td>React.js • Vite</td>
-  </tr>
+The final implementation may use a subset of these technologies depending on the implemented architecture.
 
-  <tr>
-    <td><b>Backend</b></td>
-    <td>Python • FastAPI • REST APIs</td>
-  </tr>
+---
 
-  <tr>
-    <td><b>AI / ML</b></td>
-    <td>Python • Scikit-learn • Explainable AI Techniques</td>
-  </tr>
+# Model Evaluation
 
-  <tr>
-    <td><b>Database</b></td>
-    <td>PostgreSQL</td>
-  </tr>
+The predictive model should be evaluated using multiple performance measures.
 
-  <tr>
-    <td><b>Security</b></td>
-    <td>Encryption • Authentication & Authorization • Anonymization</td>
-  </tr>
+| Metric               | Purpose                                                       |
+| -------------------- | ------------------------------------------------------------- |
+| **Accuracy**         | Measures overall correct predictions                          |
+| **Precision**        | Measures how often positive predictions are correct           |
+| **Recall**           | Measures the ability to identify relevant elevated-risk cases |
+| **F1 Score**         | Balances precision and recall                                 |
+| **Confusion Matrix** | Shows different types of prediction outcomes                  |
+| **ROC-AUC**          | Measures the model's ability to distinguish between classes   |
 
-  <tr>
-    <td><b>Deployment</b></td>
-    <td>Vercel • Cloud Infrastructure</td>
-  </tr>
-</table>
+Model evaluation should also consider false positives, false negatives, data quality, fairness, and calibration.
 
-# System Strengths
+---
 
-## Feasibility
-Uses existing AI/ML and predictive analytics technologies.
-Can integrate with existing HRMS and personnel management systems.
-Requires minimal additional hardware for initial deployment.
-Supports secure cloud or on-premise implementation.
-Mobile wellness application enables convenient self-reporting.
-Modular architecture allows phased implementation and testing.
-Can be scaled from a pilot unit to force-wide deployment.
-Existing cybersecurity technologies can support encryption and access control.
-## Viability
-Enables early and preventive welfare intervention.
-Reduces dependence on manual monitoring.
-Supports evidence-based workload and personnel management.
-Improves visibility of workforce-level welfare trends.
-Continuous monitoring enables identification of changing risk patterns.
-Privacy safeguards can improve personnel trust and participation.
-Feedback mechanisms allow continuous improvement of the system.
-Supports long-term organizational resilience and readiness.
-## Business / Market Potential
-Central Armed Police Forces (CAPFs)
-Indian Armed Forces
-State Police Organizations
-Disaster Response & Emergency Services
-Government departments with high-stress workforces
-Corporate employee wellness platforms
-International security and workforce-welfare organizations
-## Impact
-Risk Identification at Early Stages – Picks up signs of stress and burnout before they reach critical levels.
-Well-being – Facilitates counseling and welfare measures.
-Fatigue Reduction – Assists in recognizing overwork and inadequate recuperation periods.
-Readiness Enhancement – Promotes healthier and sturdier staff.
-Effective Planning of Welfare Services – Based on factual information about the organization.
-Prevention of Stress-Induced Cases – Motivates preventive action.
-Retention of Employees – Appropriate welfare can lead to job satisfaction.
-## Benefits
-Tailored welfare assistance.
-Optimized workload sharing.
-Efficient welfare decision-making process.
-Monitoring stress trends continuously.
-Less reliance on manual reporting.
-Effective resource management.
-Resilience building in personnel.
-Organizational trust through privacy.
-Scalability across several forces.
-Proactive welfare management rather than reactive responses.
-## Privacy, Ethics & Security
-Because the system handles highly sensitive personnel information, privacy is a core design requirement.
-Consent-based wellness and biometric data collection.
-Collection of only necessary data.
-Encryption during storage and transmission.
-Anonymization/pseudonymization wherever possible.
-Strict Role-Based Access Control.
-No automatic disciplinary action based on AI predictions.
-Human verification before significant welfare decisions.
-Transparent and explainable risk assessments.
-Secure audit logs and controlled data retention.
-System designed to minimize stigmatization and misuse.
-## Future Scope
-Integration with advanced wearable devices.
-Multilingual wellness applications.
-Voice-based or conversational wellness assessments.
-Federated learning for privacy-preserving model training.
-Advanced time-series and multimodal AI models.
-Unit-level workforce stress forecasting.
-Integration with existing government welfare platforms.
-Expansion to disaster-response and other high-stress occupations.
+# Future Scope
 
-# Technical Challenges & Mitigation
+The system can be extended through:
 
-<table>
-  <tr>
-    <th>Challenge</th>
-    <th>Proposed Approach</th>
-  </tr>
+* Real-time operational data integration
+* Advanced time-series analysis
+* Improved explainable AI techniques
+* Mobile application support
+* Offline functionality for restricted environments
+* Multilingual interfaces
+* Integration with existing welfare-management systems
+* Advanced anomaly detection
+* Privacy-preserving machine learning
+* Model drift and fairness monitoring
+* Secure interoperability with authorised organisational systems
 
-  <tr>
-    <td><b>Sensitive personal data</b></td>
-    <td>Encryption + anonymization + RBAC</td>
-  </tr>
+---
 
-  <tr>
-    <td><b>False positives/negatives</b></td>
-    <td>Model validation + continuous monitoring</td>
-  </tr>
+# Conclusion
 
-  <tr>
-    <td><b>Personnel distrust</b></td>
-    <td>Consent + transparency + welfare-only usage</td>
-  </tr>
+The proposed system provides an AI-assisted approach to personnel welfare monitoring by combining **data analysis, predictive modelling, explainable AI, early-warning alerts, and human oversight**.
 
-  <tr>
-    <td><b>AI bias</b></td>
-    <td>Fairness evaluation and periodic auditing</td>
-  </tr>
+Rather than replacing existing welfare mechanisms, the platform is designed to provide an additional layer of early detection and decision support.
 
-  <tr>
-    <td><b>Lack of explainability</b></td>
-    <td>Explainable AI and contributing-factor display</td>
-  </tr>
+The overall approach can be summarised as:
 
-  <tr>
-    <td><b>Cybersecurity threats</b></td>
-    <td>Secure APIs, encryption and access controls</td>
-  </tr>
-
-  <tr>
-    <td><b>Data availability</b></td>
-    <td>Multi-source data + voluntary self-reporting</td>
-  </tr>
-
-  <tr>
-    <td><b>Misuse of predictions</b></td>
-    <td>Human-in-the-loop decision-making</td>
-  </tr>
-</table>
-
-# Acknowledgement
-The project is informed by research and frameworks related to occupational mental health, military mental healthcare, responsible AI, and AI risk management.
-
-Special acknowledgement to the research and public-health organizations whose work contributed to the conceptual foundation of MANRAKSHA.
-
-# Disclaimer
-
-MANRAKSHA is a welfare decision-support system.
-
-AI predictions are advisory and should not be treated as medical diagnoses, fitness assessments, or disciplinary decisions. Final welfare decisions must remain with qualified human professionals.
-
-
-
+> **Detect patterns early → Explain the contributing factors → Generate an appropriate warning → Enable human review → Support human-led welfare action.**
