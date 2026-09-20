@@ -1,21 +1,47 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from model import predict_risk
+from explain import explain_prediction
+from schemas import PersonnelData
+
 
 app = FastAPI(
     title="ManRaksha API",
     description="AI-Based Predictive Personnel Stress & Welfare Monitoring System",
     version="1.0.0"
 )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
 def root():
-    return {
-        "message": "ManRaksha Backend is running!"
-    }
+    return {"message": "ManRaksha Backend is running!"}
 
 
 @app.get("/health")
 def health_check():
+    return {"status": "healthy"}
+
+
+@app.post("/predict")
+def predict(data: PersonnelData):
+
+    personnel_data = data.model_dump()
+
+    prediction = predict_risk(personnel_data)
+    explanation = explain_prediction(personnel_data)
+
     return {
-        "status": "healthy"
+        "risk_level": prediction["risk_level"],
+        "probabilities": prediction["probabilities"],
+        "top_contributors": explanation["top_contributors"]
     }

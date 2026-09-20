@@ -472,6 +472,47 @@ export default function App() {
   // When user clicks a role card inside Enter Platform, store selection
   const [platformSelection, setPlatformSelection] = useState(null);
 
+  // AI prediction state
+  const [predictionResult, setPredictionResult] = useState(null);
+  const [predictionLoading, setPredictionLoading] = useState(false);
+  const [predictionError, setPredictionError] = useState("");
+
+  async function getPrediction(personnelData) {
+    setPredictionLoading(true);
+    setPredictionError("");
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(personnelData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.detail
+            ? JSON.stringify(errorData.detail)
+            : "Prediction request failed"
+        );
+      }
+
+      const result = await response.json();
+      setPredictionResult(result);
+      return result;
+    } catch (error) {
+      console.error("Prediction error:", error);
+      setPredictionError(
+        "Unable to connect to the ManRaksha AI prediction service."
+      );
+      return null;
+    } finally {
+      setPredictionLoading(false);
+    }
+  }
+
   // realistic 30-day projection (deterministic)
   const raw = (() => {
     const arr = [];
@@ -631,8 +672,8 @@ export default function App() {
       email: "personnel@manraksha.demo",
       role: "personnel",
     });
-    setDashboardTab("overview");
-    setPlatformSelection(null);
+    setPlatformSelection("personnel");
+    setDashboardTab("enter");
   }}
 >
   Continue →
@@ -690,9 +731,202 @@ export default function App() {
                       <WelfareOfficerDashboardInline />
                     </div>
                   ) : platformSelection === "personnel" ? (
-                    <div className="dashboard-card" style={{ padding: 18 }}>
-                      <h3>Personnel portal</h3>
-                      <p style={{ color: "var(--muted)" }}>Personal wellness insights and self-reporting tools will appear here.</p>
+                    <div className="dashboard-card" style={{ padding: 24 }}>
+                      <div style={{ marginBottom: 24 }}>
+                        <div
+                          style={{
+                            fontSize: 12,
+                            fontWeight: 700,
+                            letterSpacing: "0.08em",
+                            color: "var(--accent)",
+                            marginBottom: 6
+                          }}
+                        >
+                          PERSONNEL WELLBEING
+                        </div>
+
+                        <h2 style={{ margin: "0 0 8px" }}>
+                          Wellness Assessment
+                        </h2>
+
+                        <p style={{ color: "var(--muted)", margin: 0 }}>
+                          Complete this voluntary assessment to receive an AI-assisted
+                          wellbeing risk projection.
+                        </p>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                          gap: 16,
+                          marginBottom: 24
+                        }}
+                      >
+                        <div>
+                          <label htmlFor="AvegDuratEcerc">Average Exercise Duration (minutes)</label>
+                          <input type="number" id="AvegDuratEcerc" defaultValue="30" min="0" max="300" style={{ width: "100%", marginTop: 6 }} />
+                        </div>
+
+                        <div>
+                          <label htmlFor="Intensity">Duty / Work Intensity</label>
+                          <input type="number" id="Intensity" defaultValue="3" min="1" max="5" style={{ width: "100%", marginTop: 6 }} />
+                        </div>
+
+                        <div>
+                          <label htmlFor="LivinPlace">Living Place</label>
+                          <select id="LivinPlace" defaultValue="Urban" style={{ width: "100%", marginTop: 6 }}>
+                            <option value="Urban">Urban</option>
+                            <option value="Rural">Rural</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="RelatshpStatus">Relationship Status</label>
+                          <select id="RelatshpStatus" defaultValue="Married" style={{ width: "100%", marginTop: 6 }}>
+                            <option value="Married">Married</option>
+                            <option value="Single">Single</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div style={{ marginBottom: 24 }}>
+                        <h3>Emotional Assessment</h3>
+                        <p style={{ color: "var(--muted)" }}>Rate each statement from 1 to 5.</p>
+
+                        <div
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                            gap: 12
+                          }}
+                        >
+                          {[1, 2, 3, 4, 5, 6].map((n) => (
+                            <div key={`EAI${n}`}>
+                              <label htmlFor={`EAI${n}`}>EAI{n}</label>
+                              <input type="number" id={`EAI${n}`} defaultValue="2" min="1" max="5" style={{ width: "100%", marginTop: 6 }} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div style={{ marginBottom: 24 }}>
+                        <h3>Daily Stress & Wellbeing Assessment</h3>
+                        <p style={{ color: "var(--muted)" }}>Rate each statement from 1 to 5.</p>
+
+                        <div
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                            gap: 12
+                          }}
+                        >
+                          {[
+                            "EDS1", "EDS2", "EDS3", "EDS4", "EDS5", "EDS6", "EDS7",
+                            "EDS8", "EDS9", "EDS10", "EDS11", "EDS12", "EDS13", "EDS14",
+                            "ESD15", "EDS16", "EDS17", "EDS18", "EDS19", "EDS20", "EDS21"
+                          ].map((field) => (
+                            <div key={field}>
+                              <label htmlFor={field}>{field}</label>
+                              <input type="number" id={field} defaultValue="2" min="1" max="5" style={{ width: "100%", marginTop: 6 }} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                        <button
+                          className="primary-button"
+                          disabled={predictionLoading}
+                          onClick={async () => {
+                            const personnelData = {
+                              AvegDuratEcerc: Number(document.getElementById("AvegDuratEcerc").value),
+                              Intensity: Number(document.getElementById("Intensity").value),
+                              LivinPlace: document.getElementById("LivinPlace").value,
+                              RelatshpStatus: document.getElementById("RelatshpStatus").value,
+                              EAI1: Number(document.getElementById("EAI1").value),
+                              EAI2: Number(document.getElementById("EAI2").value),
+                              EAI3: Number(document.getElementById("EAI3").value),
+                              EAI4: Number(document.getElementById("EAI4").value),
+                              EAI5: Number(document.getElementById("EAI5").value),
+                              EAI6: Number(document.getElementById("EAI6").value),
+                              EDS1: Number(document.getElementById("EDS1").value),
+                              EDS2: Number(document.getElementById("EDS2").value),
+                              EDS3: Number(document.getElementById("EDS3").value),
+                              EDS4: Number(document.getElementById("EDS4").value),
+                              EDS5: Number(document.getElementById("EDS5").value),
+                              EDS6: Number(document.getElementById("EDS6").value),
+                              EDS7: Number(document.getElementById("EDS7").value),
+                              EDS8: Number(document.getElementById("EDS8").value),
+                              EDS9: Number(document.getElementById("EDS9").value),
+                              EDS10: Number(document.getElementById("EDS10").value),
+                              EDS11: Number(document.getElementById("EDS11").value),
+                              EDS12: Number(document.getElementById("EDS12").value),
+                              EDS13: Number(document.getElementById("EDS13").value),
+                              EDS14: Number(document.getElementById("EDS14").value),
+                              ESD15: Number(document.getElementById("ESD15").value),
+                              EDS16: Number(document.getElementById("EDS16").value),
+                              EDS17: Number(document.getElementById("EDS17").value),
+                              EDS18: Number(document.getElementById("EDS18").value),
+                              EDS19: Number(document.getElementById("EDS19").value),
+                              EDS20: Number(document.getElementById("EDS20").value),
+                              EDS21: Number(document.getElementById("EDS21").value)
+                            };
+
+                            await getPrediction(personnelData);
+                          }}
+                        >
+                          {predictionLoading ? "Analyzing..." : "Analyze Wellbeing →"}
+                        </button>
+
+                        {predictionError && (
+                          <span style={{ color: "#b42318", fontSize: 14 }}>
+                            {predictionError}
+                          </span>
+                        )}
+                      </div>
+
+                      {predictionResult && (
+                        <div
+                          style={{
+                            marginTop: 28,
+                            padding: 20,
+                            borderRadius: 14,
+                            border: "1px solid rgba(0,0,0,0.08)"
+                          }}
+                        >
+                          <h3 style={{ marginTop: 0 }}>AI-Assisted Wellbeing Projection</h3>
+
+                          <div style={{ marginBottom: 18 }}>
+                            <strong>Risk Level:</strong> {predictionResult.risk_level}
+                          </div>
+
+                          <div style={{ marginBottom: 18 }}>
+                            <strong>Risk probabilities</strong>
+                            <div style={{ marginTop: 10 }}>
+                              <div>Low: {(predictionResult.probabilities.low * 100).toFixed(1)}%</div>
+                              <div>Moderate: {(predictionResult.probabilities.moderate * 100).toFixed(1)}%</div>
+                              <div>High: {(predictionResult.probabilities.high * 100).toFixed(1)}%</div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <strong>Key contributing factors</strong>
+                            <ul>
+                              {predictionResult.top_contributors?.map((item, index) => (
+                                <li key={index} style={{ marginBottom: 6 }}>
+                                  <strong>{item.feature}</strong> — {item.direction}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <p style={{ marginBottom: 0, color: "var(--muted)", fontSize: 13 }}>
+                            This AI output is advisory and is intended to support human-led welfare intervention. It is not a clinical diagnosis or disciplinary decision.
+                          </p>
+                        </div>
+                      )}
                     </div>
                   ) : platformSelection === "admin" ? (
                     <div className="dashboard-card" style={{ padding: 18 }}>

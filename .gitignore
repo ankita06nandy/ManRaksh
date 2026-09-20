@@ -4,3 +4,12 @@ dist/
 .env.local
 .env.*.local
 .vercel/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/
