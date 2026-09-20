@@ -24,36 +24,77 @@ def load_model():
 
 
 # ==========================================
-# RISK PREDICTION
+# PREDICTION
 # ==========================================
 
 def predict_risk(data):
     """
-    Predict personnel stress risk.
+    Predict the personnel group using the
+    trained XGBoost model.
 
-    data should be a dictionary containing
-    the same feature names used during training.
+    Group 1, Group 2 and Group 3 are the
+    original groups present in the dataset.
     """
 
     model = load_model()
 
-    input_data = pd.DataFrame([data])
+    # Convert API data into the exact column
+    # names expected by the trained model.
+
+    input_data = pd.DataFrame([{
+        "Age": data["Age"],
+        "Gender": data["Gender"],
+        "AvegWklyFreqWExerc": data["AvegWklyFreqWExerc"],
+        "AvegDuratEcerc": data["AvegDuratEcerc"],
+        "Intensity": data["Intensity"],
+        "LivinPlace": data["LivinPlace"],
+        "RelatshpStatus": data["RelatshpStatus"],
+
+        " Self Regulation": data["Self_Regulation"],
+        " Anxiety/Worry Control": data["Anxiety_Worry_Control"],
+        "Relationship Stability": data["Relationship_Stability"],
+        "Adaptibility to Environment": data["Adaptibility_to_Environment"],
+        "Task Persistent": data["Task_Persistent"],
+        "Stress Recovery": data["Stress_Recovery"],
+
+        "Unexpected Stress": data["Unexpected_Stress"],
+        "Lack of Control": data["Lack_of_Control"],
+        "Anxiety": data["Anxiety"],
+        "Overwhelmed": data["Overwhelmed"],
+        "Irritability": data["Irritability"],
+        "Confidence": data["Confidence"],
+        "Efficiency": data["Efficiency"],
+        "Situation Mastery": data["Situation_Mastery"],
+        "Operation Control": data["Operation_Control"],
+        "Accumulated Pressure": data["Accumulated_Pressure"],
+
+        "High BP": data["High_BP"],
+        "Blood Sugar": data["Blood_Sugar"],
+        "Hyperlipidimia": data["Hyperlipidimia"],
+        "Heart Disease": data["Heart_Disease"],
+        "Sleep Disorder": data["Sleep_Disorder"],
+        "Chronic Bronchitis": data["Chronic_Bronchitis"],
+        "Migraine": data["Migraine"],
+        "High BMI": data["High_BMI"],
+        "Atherosclerosis": data["Atherosclerosis"],
+        "Pneumonia": data["Pneumonia"]
+    }])
 
     prediction = model.predict(input_data)[0]
 
     probabilities = model.predict_proba(input_data)[0]
 
-    risk_labels = {
-        0: "Low Risk",
-        1: "Moderate Risk",
-        2: "High Risk"
+    group_labels = {
+        0: "Group 1",
+        1: "Group 2",
+        2: "Group 3"
     }
 
     return {
-        "risk_level": risk_labels[int(prediction)],
+        "group": group_labels[int(prediction)],
         "probabilities": {
-            "low": float(probabilities[0]),
-            "moderate": float(probabilities[1]),
-            "high": float(probabilities[2])
+            "group_1": float(probabilities[0]),
+            "group_2": float(probabilities[1]),
+            "group_3": float(probabilities[2])
         }
     }

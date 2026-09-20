@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from model import predict_risk
 from explain import explain_prediction
 from schemas import PersonnelData
@@ -8,12 +9,18 @@ from schemas import PersonnelData
 app = FastAPI(
     title="ManRaksha API",
     description="AI-Based Predictive Personnel Stress & Welfare Monitoring System",
-    version="1.0.0"
+    version="2.0.0"
 )
+
+
+# ==========================================
+# CORS
+# ==========================================
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-     "https://manraksha.vercel.app"   
+        "https://manraksha.vercel.app"
     ],
     allow_origin_regex=r"http://(localhost|127\.0\.0\.1):\d+",
     allow_credentials=True,
@@ -22,15 +29,31 @@ app.add_middleware(
 )
 
 
+# ==========================================
+# ROOT
+# ==========================================
+
 @app.get("/")
 def root():
-    return {"message": "ManRaksha Backend is running!"}
+    return {
+        "message": "ManRaksha Backend is running!"
+    }
 
+
+# ==========================================
+# HEALTH CHECK
+# ==========================================
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy"}
+    return {
+        "status": "healthy"
+    }
 
+
+# ==========================================
+# PERSONNEL PREDICTION
+# ==========================================
 
 @app.post("/predict")
 def predict(data: PersonnelData):
@@ -38,10 +61,11 @@ def predict(data: PersonnelData):
     personnel_data = data.model_dump()
 
     prediction = predict_risk(personnel_data)
+
     explanation = explain_prediction(personnel_data)
 
     return {
-        "risk_level": prediction["risk_level"],
+        "group": prediction["group"],
         "probabilities": prediction["probabilities"],
         "top_contributors": explanation["top_contributors"]
     }

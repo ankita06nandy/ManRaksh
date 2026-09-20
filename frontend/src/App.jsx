@@ -764,72 +764,104 @@ export default function App() {
                         }}
                       >
                         <div>
+                          <label htmlFor="Age">Age</label>
+                          <input type="number" id="Age" defaultValue="25" min="18" max="80" style={{ width: "100%", marginTop: 6 }} />
+                        </div>
+
+                        <div>
+                          <label htmlFor="Gender">Gender (dataset code)</label>
+                          <input type="number" id="Gender" defaultValue="1" min="0" max="10" style={{ width: "100%", marginTop: 6 }} />
+                        </div>
+
+                        <div>
+                          <label htmlFor="AvegWklyFreqWExerc">Weekly Exercise Frequency</label>
+                          <input type="number" id="AvegWklyFreqWExerc" defaultValue="4" min="0" max="20" style={{ width: "100%", marginTop: 6 }} />
+                        </div>
+
+                        <div>
                           <label htmlFor="AvegDuratEcerc">Average Exercise Duration (minutes)</label>
-                          <input type="number" id="AvegDuratEcerc" defaultValue="30" min="0" max="300" style={{ width: "100%", marginTop: 6 }} />
+                          <input type="number" id="AvegDuratEcerc" defaultValue="60" min="0" max="300" style={{ width: "100%", marginTop: 6 }} />
                         </div>
 
                         <div>
                           <label htmlFor="Intensity">Duty / Work Intensity</label>
-                          <input type="number" id="Intensity" defaultValue="3" min="1" max="5" style={{ width: "100%", marginTop: 6 }} />
+                          <input type="number" id="Intensity" defaultValue="15" min="0" max="100" style={{ width: "100%", marginTop: 6 }} />
                         </div>
 
                         <div>
-                          <label htmlFor="LivinPlace">Living Place</label>
-                          <select id="LivinPlace" defaultValue="Urban" style={{ width: "100%", marginTop: 6 }}>
-                            <option value="Urban">Urban</option>
-                            <option value="Rural">Rural</option>
-                          </select>
+                          <label htmlFor="LivinPlace">Living Place (dataset code)</label>
+                          <input type="number" id="LivinPlace" defaultValue="1" min="0" max="10" style={{ width: "100%", marginTop: 6 }} />
                         </div>
 
                         <div>
-                          <label htmlFor="RelatshpStatus">Relationship Status</label>
-                          <select id="RelatshpStatus" defaultValue="Married" style={{ width: "100%", marginTop: 6 }}>
-                            <option value="Married">Married</option>
-                            <option value="Single">Single</option>
-                            <option value="Other">Other</option>
-                          </select>
+                          <label htmlFor="RelatshpStatus">Relationship Status (dataset code)</label>
+                          <input type="number" id="RelatshpStatus" defaultValue="1" min="0" max="10" style={{ width: "100%", marginTop: 6 }} />
                         </div>
                       </div>
 
                       <div style={{ marginBottom: 24 }}>
-                        <h3>Emotional Assessment</h3>
-                        <p style={{ color: "var(--muted)" }}>Rate each statement from 1 to 5.</p>
+                        <h3>Psychological & Resilience Assessment</h3>
+                        <p style={{ color: "var(--muted)" }}>Rate each indicator from 1 to 5.</p>
 
                         <div
                           style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
                             gap: 12
                           }}
                         >
-                          {[1, 2, 3, 4, 5, 6].map((n) => (
-                            <div key={`EAI${n}`}>
-                              <label htmlFor={`EAI${n}`}>EAI{n}</label>
-                              <input type="number" id={`EAI${n}`} defaultValue="2" min="1" max="5" style={{ width: "100%", marginTop: 6 }} />
+                          {[
+                            ["Self_Regulation", "Self Regulation"],
+                            ["Anxiety_Worry_Control", "Anxiety / Worry Control"],
+                            ["Relationship_Stability", "Relationship Stability"],
+                            ["Adaptibility_to_Environment", "Adaptibility to Environment"],
+                            ["Task_Persistent", "Task Persistent"],
+                            ["Stress_Recovery", "Stress Recovery"],
+                            ["Unexpected_Stress", "Unexpected Stress"],
+                            ["Lack_of_Control", "Lack of Control"],
+                            ["Anxiety", "Anxiety"],
+                            ["Overwhelmed", "Overwhelmed"],
+                            ["Irritability", "Irritability"],
+                            ["Confidence", "Confidence"],
+                            ["Efficiency", "Efficiency"],
+                            ["Situation_Mastery", "Situation Mastery"],
+                            ["Operation_Control", "Operation Control"],
+                            ["Accumulated_Pressure", "Accumulated Pressure"]
+                          ].map(([id, label]) => (
+                            <div key={id}>
+                              <label htmlFor={id}>{label}</label>
+                              <input type="number" id={id} defaultValue="3" min="1" max="5" style={{ width: "100%", marginTop: 6 }} />
                             </div>
                           ))}
                         </div>
                       </div>
 
                       <div style={{ marginBottom: 24 }}>
-                        <h3>Daily Stress & Wellbeing Assessment</h3>
-                        <p style={{ color: "var(--muted)" }}>Rate each statement from 1 to 5.</p>
+                        <h3>Health & Welfare Indicators</h3>
+                        <p style={{ color: "var(--muted)" }}>Enter 0 for No and 1 for Yes.</p>
 
                         <div
                           style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
                             gap: 12
                           }}
                         >
                           {[
-                            "EDS1", "EDS2", "EDS3", "EDS4", "EDS5", "EDS6", "EDS7",
-                            "EDS8", "EDS9", "EDS10", "EDS11", "EDS12", "EDS13", "EDS14",
-                            "ESD15", "EDS16", "EDS17", "EDS18", "EDS19", "EDS20", "EDS21"
-                          ].map((field) => (
-                            <div key={field}>
-                              <label htmlFor={field}>{field}</label>
-                              <input type="number" id={field} defaultValue="2" min="1" max="5" style={{ width: "100%", marginTop: 6 }} />
+                            ["High_BP", "High BP"],
+                            ["Blood_Sugar", "Blood Sugar"],
+                            ["Hyperlipidimia", "Hyperlipidimia"],
+                            ["Heart_Disease", "Heart Disease"],
+                            ["Sleep_Disorder", "Sleep Disorder"],
+                            ["Chronic_Bronchitis", "Chronic Bronchitis"],
+                            ["Migraine", "Migraine"],
+                            ["High_BMI", "High BMI"],
+                            ["Atherosclerosis", "Atherosclerosis"],
+                            ["Pneumonia", "Pneumonia"]
+                          ].map(([id, label]) => (
+                            <div key={id}>
+                              <label htmlFor={id}>{label}</label>
+                              <input type="number" id={id} defaultValue="0" min="0" max="1" style={{ width: "100%", marginTop: 6 }} />
                             </div>
                           ))}
                         </div>
@@ -841,37 +873,39 @@ export default function App() {
                           disabled={predictionLoading}
                           onClick={async () => {
                             const personnelData = {
+                              Age: Number(document.getElementById("Age").value),
+                              Gender: Number(document.getElementById("Gender").value),
+                              AvegWklyFreqWExerc: Number(document.getElementById("AvegWklyFreqWExerc").value),
                               AvegDuratEcerc: Number(document.getElementById("AvegDuratEcerc").value),
                               Intensity: Number(document.getElementById("Intensity").value),
-                              LivinPlace: document.getElementById("LivinPlace").value,
-                              RelatshpStatus: document.getElementById("RelatshpStatus").value,
-                              EAI1: Number(document.getElementById("EAI1").value),
-                              EAI2: Number(document.getElementById("EAI2").value),
-                              EAI3: Number(document.getElementById("EAI3").value),
-                              EAI4: Number(document.getElementById("EAI4").value),
-                              EAI5: Number(document.getElementById("EAI5").value),
-                              EAI6: Number(document.getElementById("EAI6").value),
-                              EDS1: Number(document.getElementById("EDS1").value),
-                              EDS2: Number(document.getElementById("EDS2").value),
-                              EDS3: Number(document.getElementById("EDS3").value),
-                              EDS4: Number(document.getElementById("EDS4").value),
-                              EDS5: Number(document.getElementById("EDS5").value),
-                              EDS6: Number(document.getElementById("EDS6").value),
-                              EDS7: Number(document.getElementById("EDS7").value),
-                              EDS8: Number(document.getElementById("EDS8").value),
-                              EDS9: Number(document.getElementById("EDS9").value),
-                              EDS10: Number(document.getElementById("EDS10").value),
-                              EDS11: Number(document.getElementById("EDS11").value),
-                              EDS12: Number(document.getElementById("EDS12").value),
-                              EDS13: Number(document.getElementById("EDS13").value),
-                              EDS14: Number(document.getElementById("EDS14").value),
-                              ESD15: Number(document.getElementById("ESD15").value),
-                              EDS16: Number(document.getElementById("EDS16").value),
-                              EDS17: Number(document.getElementById("EDS17").value),
-                              EDS18: Number(document.getElementById("EDS18").value),
-                              EDS19: Number(document.getElementById("EDS19").value),
-                              EDS20: Number(document.getElementById("EDS20").value),
-                              EDS21: Number(document.getElementById("EDS21").value)
+                              LivinPlace: Number(document.getElementById("LivinPlace").value),
+                              RelatshpStatus: Number(document.getElementById("RelatshpStatus").value),
+                              Self_Regulation: Number(document.getElementById("Self_Regulation").value),
+                              Anxiety_Worry_Control: Number(document.getElementById("Anxiety_Worry_Control").value),
+                              Relationship_Stability: Number(document.getElementById("Relationship_Stability").value),
+                              Adaptibility_to_Environment: Number(document.getElementById("Adaptibility_to_Environment").value),
+                              Task_Persistent: Number(document.getElementById("Task_Persistent").value),
+                              Stress_Recovery: Number(document.getElementById("Stress_Recovery").value),
+                              Unexpected_Stress: Number(document.getElementById("Unexpected_Stress").value),
+                              Lack_of_Control: Number(document.getElementById("Lack_of_Control").value),
+                              Anxiety: Number(document.getElementById("Anxiety").value),
+                              Overwhelmed: Number(document.getElementById("Overwhelmed").value),
+                              Irritability: Number(document.getElementById("Irritability").value),
+                              Confidence: Number(document.getElementById("Confidence").value),
+                              Efficiency: Number(document.getElementById("Efficiency").value),
+                              Situation_Mastery: Number(document.getElementById("Situation_Mastery").value),
+                              Operation_Control: Number(document.getElementById("Operation_Control").value),
+                              Accumulated_Pressure: Number(document.getElementById("Accumulated_Pressure").value),
+                              High_BP: Number(document.getElementById("High_BP").value),
+                              Blood_Sugar: Number(document.getElementById("Blood_Sugar").value),
+                              Hyperlipidimia: Number(document.getElementById("Hyperlipidimia").value),
+                              Heart_Disease: Number(document.getElementById("Heart_Disease").value),
+                              Sleep_Disorder: Number(document.getElementById("Sleep_Disorder").value),
+                              Chronic_Bronchitis: Number(document.getElementById("Chronic_Bronchitis").value),
+                              Migraine: Number(document.getElementById("Migraine").value),
+                              High_BMI: Number(document.getElementById("High_BMI").value),
+                              Atherosclerosis: Number(document.getElementById("Atherosclerosis").value),
+                              Pneumonia: Number(document.getElementById("Pneumonia").value)
                             };
 
                             await getPrediction(personnelData);
@@ -899,15 +933,15 @@ export default function App() {
                           <h3 style={{ marginTop: 0 }}>AI-Assisted Wellbeing Projection</h3>
 
                           <div style={{ marginBottom: 18 }}>
-                            <strong>Risk Level:</strong> {predictionResult.risk_level}
+                            <strong>Predicted Group:</strong> {predictionResult.group}
                           </div>
 
                           <div style={{ marginBottom: 18 }}>
-                            <strong>Risk probabilities</strong>
+                            <strong>Prediction probabilities</strong>
                             <div style={{ marginTop: 10 }}>
-                              <div>Low: {(predictionResult.probabilities.low * 100).toFixed(1)}%</div>
-                              <div>Moderate: {(predictionResult.probabilities.moderate * 100).toFixed(1)}%</div>
-                              <div>High: {(predictionResult.probabilities.high * 100).toFixed(1)}%</div>
+                              <div>Group 1: {(predictionResult.probabilities.group_1 * 100).toFixed(1)}%</div>
+                              <div>Group 2: {(predictionResult.probabilities.group_2 * 100).toFixed(1)}%</div>
+                              <div>Group 3: {(predictionResult.probabilities.group_3 * 100).toFixed(1)}%</div>
                             </div>
                           </div>
 

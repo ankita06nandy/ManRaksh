@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import joblib
 
 from pathlib import Path
@@ -32,7 +31,7 @@ MODEL_PATH = MODEL_DIR / "xgboost_model.pkl"
 # LOAD DATA
 # ==========================================
 
-print("Loading dataset...")
+print("Loading updated dataset...")
 
 df = pd.read_excel(DATA_PATH)
 
@@ -40,74 +39,88 @@ print(f"Dataset shape: {df.shape}")
 
 
 # ==========================================
-# CREATE STRESS RISK TARGET
+# TARGET
 # ==========================================
 
-def classify_risk(score):
-    if score <= 23:
-        return 0       # Low Risk
-    elif score <= 36:
-        return 1       # Moderate Risk
-    else:
-        return 2       # High Risk
+# Groups is the existing 3-class grouping
+# provided in the updated dataset.
+#
+# We do NOT rename these groups as Low /
+# Moderate / High because the dataset does
+# not provide an official mapping.
 
+target_column = "Groups"
 
-df["risk_level"] = df["PercStressTotatl"].apply(classify_risk)
-
-
-print("\nRisk distribution:")
-print(df["risk_level"].value_counts().sort_index())
+print("\nGroup distribution:")
+print(df[target_column].value_counts().sort_index())
 
 
 # ==========================================
 # SELECT FEATURES
 # ==========================================
 
-# We deliberately exclude PS1-PS10 because
-# PercStressTotatl is calculated from them.
-#
-# We also exclude the calculated totals to
-# reduce data leakage.
-
 feature_columns = [
+    "Age",
+    "Gender",
+    "AvegWklyFreqWExerc",
     "AvegDuratEcerc",
     "Intensity",
     "LivinPlace",
     "RelatshpStatus",
 
-    "EAI1",
-    "EAI2",
-    "EAI3",
-    "EAI4",
-    "EAI5",
-    "EAI6",
+    " Self Regulation",
+    " Anxiety/Worry Control",
+    "Relationship Stability",
+    "Adaptibility to Environment",
+    "Task Persistent",
+    "Stress Recovery",
 
-    "EDS1",
-    "EDS2",
-    "EDS3",
-    "EDS4",
-    "EDS5",
-    "EDS6",
-    "EDS7",
-    "EDS8",
-    "EDS9",
-    "EDS10",
-    "EDS11",
-    "EDS12",
-    "EDS13",
-    "EDS14",
-    "ESD15",
-    "EDS16",
-    "EDS17",
-    "EDS18",
-    "EDS19",
-    "EDS20",
-    "EDS21"
+    "Unexpected Stress",
+    "Lack of Control",
+    "Anxiety",
+    "Overwhelmed",
+    "Irritability",
+    "Confidence",
+    "Efficiency",
+    "Situation Mastery",
+    "Operation Control",
+    "Accumulated Pressure",
+
+    "High BP",
+    "Blood Sugar",
+    "Hyperlipidimia",
+    "Heart Disease",
+    "Sleep Disorder",
+    "Chronic Bronchitis",
+    "Migraine",
+    "High BMI",
+    "Atherosclerosis",
+    "Pneumonia"
 ]
 
 
-X = df[feature_columns]
-y = df["risk_level"]
+X = df[feature_columns].copy()
+y = df[target_column].copy()
+
+
+# ==========================================
+# CONVERT TARGET TO 0, 1, 2
+# ==========================================
+
+# XGBoost multiclass classification expects
+# class labels starting from 0.
+
+group_mapping = {
+    1: 0,
+    2: 1,
+    3: 2
+}
+
+y = y.map(group_mapping)
+
+
+if y.isna().any():
+    raise ValueError("Unexpected value found in Groups column.")
 
 
 # ==========================================
@@ -115,6 +128,7 @@ y = df["risk_level"]
 # ==========================================
 
 categorical_features = [
+    "Gender",
     "LivinPlace",
     "RelatshpStatus"
 ]
@@ -193,7 +207,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 
-print("\nTraining model...")
+print("\nTraining XGBoost model...")
 
 pipeline.fit(X_train, y_train)
 
@@ -206,6 +220,7 @@ y_pred = pipeline.predict(X_test)
 
 
 accuracy = accuracy_score(y_test, y_pred)
+
 macro_f1 = f1_score(
     y_test,
     y_pred,
@@ -220,22 +235,30 @@ print("==========================================")
 print(f"Accuracy : {accuracy:.4f}")
 print(f"Macro F1 : {macro_f1:.4f}")
 
+
 print("\nClassification Report:")
+
 print(
     classification_report(
         y_test,
         y_pred,
         target_names=[
-            "Low Risk",
-            "Moderate Risk",
-            "High Risk"
+            "Group 1",
+            "Group 2",
+            "Group 3"
         ]
     )
 )
 
 
 print("\nConfusion Matrix:")
-print(confusion_matrix(y_test, y_pred))
+
+print(
+    confusion_matrix(
+        y_test,
+        y_pred
+    )
+)
 
 
 # ==========================================
@@ -246,11 +269,13 @@ print("\n==========================================")
 print("5-FOLD CROSS VALIDATION")
 print("==========================================")
 
+
 cv = StratifiedKFold(
     n_splits=5,
     shuffle=True,
     random_state=42
 )
+
 
 cv_accuracy = cross_val_score(
     pipeline,
@@ -259,6 +284,7 @@ cv_accuracy = cross_val_score(
     cv=cv,
     scoring="accuracy"
 )
+
 
 cv_f1 = cross_val_score(
     pipeline,
@@ -273,6 +299,7 @@ print(
     f"Cross-validation Accuracy: "
     f"{cv_accuracy.mean():.4f} ± {cv_accuracy.std():.4f}"
 )
+
 
 print(
     f"Cross-validation Macro F1: "
@@ -289,6 +316,7 @@ MODEL_DIR.mkdir(
     exist_ok=True
 )
 
+
 joblib.dump(
     pipeline,
     MODEL_PATH
@@ -298,5 +326,6 @@ joblib.dump(
 print("\n==========================================")
 print("MODEL SAVED")
 print("==========================================")
+
 
 print(f"Saved to: {MODEL_PATH}")
