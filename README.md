@@ -1,4 +1,35 @@
-# AI-Based Predictive Personnel Stress and Welfare Monitoring System
+
+<div align="center">
+<img src="https://github.com/ankita06nandy/ManRaksha/blob/main/frontend/public/ManRaksha_logo.png" alt="ManRaksha Logo" width="150">
+<h1>MANRAKSHA</h1>
+<h3>AI-Based Predictive Personnel Stress &amp; Welfare Monitoring System</h3>
+
+<p>
+  <b>“Detect Early. Support Privately. Protect Always.”</b>
+</p>
+
+</div>
+
+<div align="center">
+
+![AI](https://img.shields.io/badge/AI-Predictive_Welfare-4F7942?style=flat-square)
+![ML](https://img.shields.io/badge/ML-XGBoost-6B8E4A?style=flat-square)
+![XAI](https://img.shields.io/badge/XAI-SHAP-7A7A7A?style=flat-square)
+![Frontend](https://img.shields.io/badge/Frontend-React-4F7942?style=flat-square)
+![Backend](https://img.shields.io/badge/Backend-FastAPI-5F8060?style=flat-square)
+![Database](https://img.shields.io/badge/Database-PostgreSQL-6B8E4A?style=flat-square)
+![Deployment](https://img.shields.io/badge/Deployment-Vercel-4F7942?style=flat-square)
+
+<br>
+
+![SIH](https://img.shields.io/badge/SIH-2026-1976D2?style=flat-square)
+![Problem Statement](https://img.shields.io/badge/PS-SIH26186-5E35B1?style=flat-square)
+![Category](https://img.shields.io/badge/Category-Software-2E7D32?style=flat-square)
+![Organization](https://img.shields.io/badge/Organization-Ministry_of_Home_Affairs-6A1B9A?style=flat-square)
+![Theme](https://img.shields.io/badge/Theme-MedTech_|_BioTech_|_HealthTech-EF6C00?style=flat-square)
+
+</div>
+
 
 ## Problem Statement
 
