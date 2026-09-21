@@ -431,17 +431,17 @@ flowchart TB
 
 | Layer                | Proposed Technology                 |
 | -------------------- | ----------------------------------- |
-| **Frontend**         | React / Next.js                     |
-| **Styling**          | HTML, CSS, JavaScript               |
-| **Backend**          | Node.js / Express or Python FastAPI |
-| **Machine Learning** | Python                              |
-| **ML Libraries**     | Pandas, NumPy, Scikit-learn         |
-| **Database**         | MongoDB                             |
-| **Authentication**   | JWT / Secure Authentication         |
-| **Communication**    | REST APIs                           |
-| **Deployment**       | Cloud-based deployment              |
+| **Frontend**         | React +Vite                   |
+| **Styling**          | CSS, JavaScript           
+|
+| **Backend**          | Python + FastAPI + Uvicor
+| **Machine Learning** | XGBoost                              |
+| **ML Libraries**     | Pandas, NumPy, Scikit-learn, SHAP, Joblib        |
+| **Database**         | PostgreSQL + SQLAlchemy                            |
+| **Authentication**   | JWT        |
+| **Communication**    | REST API + JSON +CORS                        |
+| **Deployment**       | Vercel + Render             |
 | **Version Control**  | Git & GitHub                        |
-
 The final implementation may use a subset of these technologies depending on the implemented architecture.
 
 ---
