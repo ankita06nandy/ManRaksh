@@ -23,7 +23,7 @@
 <br>
 
 ![SIH](https://img.shields.io/badge/SIH-2026-1976D2?style=flat-square)
-![Problem Statement](https://img.shields.io/badge/PS-SIH26186-FFB6C1?style=flat-square)
+![Problem Statement](https://img.shields.io/badge/PS-SIH26186-DE3163?style=flat-square)
 ![Category](https://img.shields.io/badge/Category-Software-2E7D32?style=flat-square)
 ![Organization](https://img.shields.io/badge/Organization-Ministry_of_Home_Affairs-6A1B9A?style=flat-square)
 ![Theme](https://img.shields.io/badge/Theme-MedTech_|_BioTech_|_HealthTech-EF6C00?style=flat-square)
