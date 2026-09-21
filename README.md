@@ -429,19 +429,18 @@ flowchart TB
 
 # Technology Stack
 
-| Layer                | Proposed Technology                 |
-| -------------------- | ----------------------------------- |
-| **Frontend**         | React +Vite                   |
-| **Styling**          | CSS, JavaScript           
-|
-| **Backend**          | Python + FastAPI + Uvicor
-| **Machine Learning** | XGBoost                              |
-| **ML Libraries**     | Pandas, NumPy, Scikit-learn, SHAP, Joblib        |
-| **Database**         | PostgreSQL + SQLAlchemy                            |
-| **Authentication**   | JWT        |
-| **Communication**    | REST API + JSON +CORS                        |
-| **Deployment**       | Vercel + Render             |
-| **Version Control**  | Git & GitHub                        |
+| Layer                | Proposed Technology                      |
+| -------------------- | ---------------------------------------- |
+| **Frontend**         | React +Vite                              |
+| **Styling**          | CSS, JavaScript                          |
+| **Backend**          | Python + FastAPI + Uvicor.               |
+| **Machine Learning** | XGBoost                                  |
+| **ML Libraries**     | Pandas, NumPy, Scikit-learn, SHAP, Joblib|
+| **Database**         | PostgreSQL + SQLAlchemy                  |
+| **Authentication**   | JWT                                      |
+| **Communication**    | REST API + JSON +CORS                    |
+| **Deployment**       | Vercel + Render                          |
+| **Version Control**  | Git & GitHub                             |
 The final implementation may use a subset of these technologies depending on the implemented architecture.
 
 ---
