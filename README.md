@@ -18,7 +18,7 @@
 ![Frontend](https://img.shields.io/badge/Frontend-React-FFDB58?style=flat-square)
 ![Backend](https://img.shields.io/badge/Backend-FastAPI-FFDB58?style=flat-square)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL-FFDB58?style=flat-square)
-![Deployment](https://img.shields.io/badge/Deployment-Vercel-4F7942?style=flat-square)
+![Deployment](https://img.shields.io/badge/Deployment-Vercel-FFDB58?style=flat-square)
 
 <br>
 
