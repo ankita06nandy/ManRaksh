@@ -341,11 +341,11 @@ function LoginSignup({ onClose, onLogin }) {
       <div className="auth-container">
         <div className="auth-header">
           <img
-            src="/ManRaksha_logo.png"
-            alt="ManRaksha logo"
+            src="/ManRaksh_logo.png"
+            alt="ManRaksh logo"
             className="auth-logo-image"
            />
-          <h1>ManRaksha</h1>
+          <h1>ManRaksh</h1>
           <p>Personnel Welfare & Risk Intelligence</p>
         </div>
 
@@ -505,7 +505,7 @@ export default function App() {
     } catch (error) {
       console.error("Prediction error:", error);
       setPredictionError(
-        "Unable to connect to the ManRaksha AI prediction service."
+        "Unable to connect to the ManRaksh AI prediction service."
       );
       return null;
     } finally {
@@ -574,8 +574,8 @@ export default function App() {
         <div className="dashboard-screen">
           <nav className="dashboard-nav">
             <div className="logo">
-              <img src="/ManRaksha_logo.png" alt="ManRaksha logo" />
-              <span>ManRaksha</span>
+              <img src="/ManRaksh_logo.png" alt="ManRaksh logo" />
+              <span>ManRaksh</span>
             </div>
 
             <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
@@ -583,7 +583,7 @@ export default function App() {
 
               <a
                 className="secondary-button"
-                href="https://manraksha-app.vercel.app/"
+                href="https://manraksh.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
                 style={{ textDecoration: "none", display: "inline-block" }}
@@ -669,7 +669,7 @@ export default function App() {
   onClick={() => {
     setAuthUser({
       name: "Personnel",
-      email: "personnel@manraksha.demo",
+      email: "personnel@manraksh.demo",
       role: "personnel",
     });
     setPlatformSelection("personnel");
@@ -1696,13 +1696,13 @@ export default function App() {
             fontSize: 13,
           }}
         >
-          © ManRaksha — Risk intelligence for
+          © ManRaksh — Risk intelligence for
           proactive welfare
         </div>
 
         <div>
           <a
-            href="https://manraksha-app.vercel.app/"
+            href="https://manraksh.vercel.app/"
             target="_blank"
             rel="noreferrer"
             className="secondary-button"
@@ -1753,14 +1753,14 @@ export default function App() {
       <div className="platform-screen">
         <nav className="navbar">
           <div className="logo">
-            <img src="/ManRaksha_logo.png" alt="ManRaksha logo" />
-            <span>ManRaksha</span>
+            <img src="/ManRaksh_logo.png" alt="ManRaksh logo" />
+            <span>ManRaksh</span>
           </div>
 
           <div className="nav-links">
             <a href="#how">How it works</a>
             <a href="#about">About</a>
-            <a href="https://manraksha-app.vercel.app/" target="_blank" rel="noreferrer">Explore Platform</a>
+            <a href="https://manraksh.vercel.app/" target="_blank" rel="noreferrer">Explore Platform</a>
           </div>
 
           <div>
@@ -1791,7 +1791,7 @@ export default function App() {
     </h1>
 
     <p className="hero-description">
-      ManRaksha uses predictive intelligence to recognize changing
+      ManRaksh uses predictive intelligence to recognize changing
       stress and welfare patterns in uniformed personnel, helping
       welfare teams respond earlier with timely, human-led support.
     </p>
@@ -1819,7 +1819,7 @@ export default function App() {
     <div className="message-content">
 
       <div className="message-small">
-        THE MANRAKSHA APPROACH
+        THE MANRAKSH APPROACH
       </div>
 
       <div className="message-title">
@@ -1849,7 +1849,7 @@ export default function App() {
         <section id="how" className="problem-section">
 
   <div className="section-kicker">
-    HOW MANRAKSHA WORKS
+    HOW MANRAKSH WORKS
   </div>
 
   <h2>
@@ -1857,7 +1857,7 @@ export default function App() {
   </h2>
 
   <p className="section-intro">
-    ManRaksha combines predictive analytics with welfare-focused
+    ManRaksh combines predictive analytics with welfare-focused
     intervention to help identify changing patterns in personnel
     wellbeing before they become more serious concerns.
   </p>
