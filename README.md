@@ -231,6 +231,7 @@ It analyses relevant features such as:
 | **Operational Factors** | Relevant changes in operational conditions              |
 | **Historical Patterns** | Previous anonymised observations                        |
 
+
 The exact features used will depend on the availability, quality, and suitability of the dataset.
 
 ### Machine Learning Pipeline
