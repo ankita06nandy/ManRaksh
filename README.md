@@ -433,7 +433,7 @@ flowchart TB
 | -------------------- | ---------------------------------------- |
 | **Frontend**         | React +Vite                              |
 | **Styling**          | CSS, JavaScript                          |
-| **Backend**          | Python + FastAPI + Uvicor.               |
+| **Backend**          | Python + FastAPI + Uvicorn               |
 | **Machine Learning** | XGBoost                                  |
 | **ML Libraries**     | Pandas, NumPy, Scikit-learn, SHAP, Joblib|
 | **Database**         | PostgreSQL + SQLAlchemy                  |
