@@ -310,28 +310,57 @@ function LoginSignup({ onClose, onLogin }) {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!form.email || !form.password) {
-      alert("Please enter your email and password.");
-      return;
+  if (!form.email || !form.password) {
+    alert("Please enter your email and password.");
+    return;
+  }
+
+  if (mode === "signup" && !form.name) {
+    alert("Please enter your name.");
+    return;
+  }
+
+  try {
+    const endpoint =
+      mode === "login"
+        ? "https://manraksha.onrender.com/login"
+        : "https://manraksha.onrender.com/register";
+
+    const response = await fetch(
+      `${endpoint}?email=${encodeURIComponent(form.email)}&password=${encodeURIComponent(form.password)}`,
+      {
+        method: "POST",
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || "Authentication failed");
     }
 
-    if (mode === "signup" && !form.name) {
-      alert("Please enter your name.");
-      return;
+    if (mode === "login") {
+      localStorage.setItem("token", data.access_token);
+
+      onLogin({
+        name: form.email.split("@")[0],
+        email: form.email,
+        role: selectedRole,
+      });
+
+      onClose();
+    } else {
+      alert("Account created successfully. Please login.");
+      setMode("login");
     }
-
-    onLogin({
-      name: form.name || form.email.split("@")[0],
-      email: form.email,
-      role: selectedRole,
-    });
-
-    onClose();
-  };
-
+  } catch (error) {
+    console.error("Authentication error:", error);
+    alert(error.message);
+  }
+};
   return (
     <div className="auth-page">
       <button className="auth-back-button" onClick={onClose}>
@@ -482,16 +511,23 @@ export default function App() {
     setPredictionError("");
 
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Please login before using the AI prediction service.");
+      }
+
       const response = await fetch("https://manraksha.onrender.com/predict", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(personnelData)
+        body: JSON.stringify(personnelData),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(
           errorData.detail
             ? JSON.stringify(errorData.detail)
@@ -505,7 +541,7 @@ export default function App() {
     } catch (error) {
       console.error("Prediction error:", error);
       setPredictionError(
-        "Unable to connect to the ManRaksh AI prediction service."
+        error.message || "Unable to connect to the ManRaksh AI prediction service."
       );
       return null;
     } finally {
