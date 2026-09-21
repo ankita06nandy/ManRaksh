@@ -15,9 +15,9 @@
 ![AI](https://img.shields.io/badge/AI-Predictive_Welfare-FFDB58?style=flat-square)
 ![ML](https://img.shields.io/badge/ML-XGBoost-FFDB58?style=flat-square)
 ![XAI](https://img.shields.io/badge/XAI-SHAP-FFDB58?style=flat-square)
-![Frontend](https://img.shields.io/badge/Frontend-React-4F7942?style=flat-square)
-![Backend](https://img.shields.io/badge/Backend-FastAPI-5F8060?style=flat-square)
-![Database](https://img.shields.io/badge/Database-PostgreSQL-6B8E4A?style=flat-square)
+![Frontend](https://img.shields.io/badge/Frontend-React-FFDB58?style=flat-square)
+![Backend](https://img.shields.io/badge/Backend-FastAPI-FFDB58?style=flat-square)
+![Database](https://img.shields.io/badge/Database-PostgreSQL-FFDB58?style=flat-square)
 ![Deployment](https://img.shields.io/badge/Deployment-Vercel-4F7942?style=flat-square)
 
 <br>
