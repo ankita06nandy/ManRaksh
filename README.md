@@ -1,6 +1,6 @@
 
 <div align="center">
-<img src="https://github.com/ankita06nandy/ManRaksha/blob/main/frontend/public/ManRaksha_logo.png" alt="ManRaksha Logo" width="150">
+<img src="https://github.com/ankita06nandy/ManRaksh/blob/main/frontend/public/ManRaksh_logo.png" alt="ManRaksh Logo" width="150">
 <h1>MANRAKSH</h1>
 <h3>AI-Based Predictive Personnel Stress &amp; Welfare Monitoring System</h3>
 

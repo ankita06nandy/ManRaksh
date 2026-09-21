@@ -5,9 +5,13 @@ from model import predict_risk
 from explain import explain_prediction
 from schemas import PersonnelData
 
+from database import engine, Base
+from models import User
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="ManRaksha API",
+    title="ManRaksh API",
     description="AI-Based Predictive Personnel Stress & Welfare Monitoring System",
     version="2.0.0"
 )
@@ -20,7 +24,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://manraksha-app.vercel.app"
+        "https://manraksh.vercel.app"
     ],
     allow_origin_regex=r"http://(localhost|127\.0\.0\.1):\d+",
     allow_credentials=True,
@@ -36,7 +40,7 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {
-        "message": "ManRaksha Backend is running!"
+        "message": "ManRaksh Backend is running!"
     }
 
 
