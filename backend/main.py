@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Header, HTTPException, Query
+git statusfrom fastapi import FastAPI, Depends, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from model import predict_risk
