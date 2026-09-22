@@ -371,7 +371,7 @@ const handleSubmit = async (e) => {
       onLogin({
         name: data.user?.email?.split("@")[0] || form.email.split("@")[0],
         email: data.user?.email || form.email,
-        role: data.user?.role || selectedRole,
+        role: selectedRole || data.user?.role || "personnel",
       });
     } else {
       alert("Account created successfully. Please login.");
@@ -754,7 +754,7 @@ export default function App() {
         ? "enter"
         : user.role === "admin"
           ? "admin"
-          : "overview"
+          : "welfare"
     );
     setShowDashboard(true);
   }
