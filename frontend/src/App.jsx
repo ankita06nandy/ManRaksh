@@ -1,26 +1,56 @@
 // src/App.jsx
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://manraksha.onrender.com";
+
+const DASHBOARD_DATA = {
+  personnel_count: 277,
+  welfare_officer_count: 18,
+  active_user_count: 231,
+  total: 277,
+  low: 150,
+  moderate: 75,
+  elevated: 52,
+  trend: [
+    29, 31, 30, 34, 33, 35, 36, 34, 37, 39,
+    38, 40, 41, 39, 42, 44, 43, 45, 46, 44,
+    47, 48, 46, 49, 50, 48, 51, 52, 50, 52,
+  ],
+  priority: [
+    { id: "P1042", risk: "Moderate", reason: "Dataset Group 2 record" },
+    { id: "P1087", risk: "Elevated", reason: "Dataset Group 3 record" },
+    { id: "P1121", risk: "Elevated", reason: "Dataset Group 3 record" },
+    { id: "P1154", risk: "Moderate", reason: "Dataset Group 2 record" },
+  ],
+  factors: [
+    { name: "Stress indicators", impact: "" },
+    { name: "Resilience indicators", impact: "" },
+    { name: "Health indicators", impact: "" },
+  ],
+};
+
+const DAILY_GOALS = [
+  {
+    id: "rest",
+    title: "Protect your rest window",
+    description: "Set aside time for uninterrupted rest and recovery today.",
+  },
+  {
+    id: "movement",
+    title: "Take a movement break",
+    description: "Complete a short walk, stretch, or exercise break.",
+  },
+  {
+    id: "check-in",
+    title: "Check in with yourself",
+    description: "Notice how you are feeling and record anything you need support with.",
+  },
+];
 
 /* =========================
    Helpers and small chart components
    ========================= */
-
-function smoothArray(arr, windowSize = 3) {
-  const out = [];
-  for (let i = 0; i < arr.length; i++) {
-    let start = Math.max(0, i - Math.floor(windowSize / 2));
-    let end = Math.min(arr.length - 1, i + Math.floor(windowSize / 2));
-    let sum = 0;
-    let count = 0;
-    for (let j = start; j <= end; j++) {
-      sum += arr[j];
-      count++;
-    }
-    out.push(sum / count);
-  }
-  return out;
-}
 
 function LineChart({ data = [], width = 720, height = 140 }) {
   const padding = 18;
@@ -79,36 +109,26 @@ function LineChart({ data = [], width = 720, height = 140 }) {
    Welfare Officer Dashboard (inline)
    ========================= */
 
-function WelfareOfficerDashboardInline({ sampleData }) {
-  const personnelTotal = sampleData?.total || 248;
-  const low = sampleData?.low || 181;
-  const moderate = sampleData?.moderate || 49;
-  const elevated = sampleData?.elevated || 18;
+function WelfareOfficerDashboardInline({ sampleData, error }) {
+  const data = sampleData || DASHBOARD_DATA;
+  const personnelTotal = data.personnel_count ?? data.total;
+  const low = data.low;
+  const moderate = data.moderate;
+  const elevated = data.elevated;
 
-  const trend = sampleData?.trend || (() => {
-    const arr = [];
-    for (let i = 0; i < 30; i++) {
-      const base = 30 + Math.sin(i / 3) * 4 + i * 0.6;
-      arr.push(Math.round(base * 10) / 10);
-    }
-    return arr;
-  })();
+  const trend = data.trend;
 
-  const priorityList = sampleData?.priority || [
-    { id: "P1042", risk: "Moderate", reason: "Deployment duration" },
-    { id: "P1087", risk: "Elevated", reason: "Night-duty frequency" },
-    { id: "P1121", risk: "Elevated", reason: "Workload variation" },
-    { id: "P1154", risk: "Moderate", reason: "Leave gap" },
-  ];
+  const priorityList = data.priority;
 
-  const explainable = sampleData?.factors || [
-    { name: "Prolonged deployment", impact: "+18%" },
-    { name: "Night-duty frequency", impact: "+14%" },
-    { name: "Workload variation", impact: "+12%" },
-  ];
+  const explainable = data.factors;
 
   return (
     <div className="dashboard" style={{ paddingTop: 24 }}>
+      {error && (
+        <div style={{ color: "#b42318", marginBottom: 12 }}>
+          {error}
+        </div>
+      )}
       <div className="dashboard-heading" style={{ alignItems: "flex-start", gap: 12 }}>
         <div>
           <h1>Welfare Intelligence Dashboard</h1>
@@ -326,13 +346,16 @@ const handleSubmit = async (e) => {
   try {
     const endpoint =
       mode === "login"
-        ? "https://manraksha.onrender.com/login"
-        : "https://manraksha.onrender.com/register";
+        ? `${API_BASE_URL}/login`
+        : `${API_BASE_URL}/register`;
 
     const response = await fetch(
       `${endpoint}?email=${encodeURIComponent(form.email)}&password=${encodeURIComponent(form.password)}`,
       {
         method: "POST",
+        headers: {
+          "X-Account-Role": selectedRole || "personnel",
+        },
       }
     );
 
@@ -346,12 +369,10 @@ const handleSubmit = async (e) => {
       localStorage.setItem("token", data.access_token);
 
       onLogin({
-        name: form.email.split("@")[0],
-        email: form.email,
-        role: selectedRole,
+        name: data.user?.email?.split("@")[0] || form.email.split("@")[0],
+        email: data.user?.email || form.email,
+        role: data.user?.role || selectedRole,
       });
-
-      onClose();
     } else {
       alert("Account created successfully. Please login.");
       setMode("login");
@@ -487,24 +508,188 @@ const handleSubmit = async (e) => {
   );
 }
 
+function PersonnelSupportAndGoals() {
+  const [completedGoals, setCompletedGoals] = useState(() => {
+    const storedGoals = localStorage.getItem("dailyGoals");
+    if (!storedGoals) return {};
+    try {
+      return JSON.parse(storedGoals);
+    } catch {
+      localStorage.removeItem("dailyGoals");
+      return {};
+    }
+  });
+
+  const toggleGoal = (goalId) => {
+    setCompletedGoals((current) => {
+      const next = { ...current, [goalId]: !current[goalId] };
+      localStorage.setItem("dailyGoals", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18, marginTop: 22 }}>
+      <section className="dashboard-card" style={{ padding: 20 }}>
+        <small>SELF-CARE PLAN</small>
+        <h2 style={{ margin: "6px 0 8px" }}>Daily goals</h2>
+        <p style={{ color: "var(--muted)", marginTop: 0 }}>Small, practical steps to support your wellbeing today.</p>
+        <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+          {DAILY_GOALS.map((goal) => (
+            <button
+              key={goal.id}
+              type="button"
+              onClick={() => toggleGoal(goal.id)}
+              aria-pressed={Boolean(completedGoals[goal.id])}
+              style={{
+                display: "flex",
+                gap: 10,
+                alignItems: "flex-start",
+                textAlign: "left",
+                padding: 12,
+                borderRadius: 12,
+                border: "1px solid rgba(44,94,98,0.12)",
+                background: completedGoals[goal.id] ? "rgba(207,239,242,0.55)" : "rgba(255,255,255,0.9)",
+                cursor: "pointer",
+              }}
+            >
+              <span aria-hidden="true" style={{ minWidth: 20, height: 20, borderRadius: "50%", border: "2px solid var(--accent)", background: completedGoals[goal.id] ? "var(--accent)" : "transparent", color: "white", display: "grid", placeItems: "center", fontSize: 12, fontWeight: 700 }}>
+                {completedGoals[goal.id] ? "✓" : ""}
+              </span>
+              <span>
+                <strong style={{ display: "block" }}>{goal.title}</strong>
+                <span style={{ display: "block", color: "var(--muted)", fontSize: 13, marginTop: 3 }}>{goal.description}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="dashboard-card" style={{ padding: 20 }}>
+        <small>CONFIDENTIAL SUPPORT</small>
+        <h2 style={{ margin: "6px 0 8px" }}>Support</h2>
+        <p style={{ color: "var(--muted)", marginTop: 0 }}>You do not have to manage difficult moments alone.</p>
+        <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+          <div style={{ padding: 12, borderRadius: 12, background: "rgba(255,255,255,0.9)", border: "1px solid rgba(44,94,98,0.08)" }}>
+            <strong>Talk to a welfare officer</strong>
+            <p style={{ color: "var(--muted)", fontSize: 13, margin: "5px 0 0" }}>Request a confidential conversation about your wellbeing or workload.</p>
+          </div>
+          <div style={{ padding: 12, borderRadius: 12, background: "rgba(255,255,255,0.9)", border: "1px solid rgba(44,94,98,0.08)" }}>
+            <strong>Use peer support</strong>
+            <p style={{ color: "var(--muted)", fontSize: 13, margin: "5px 0 0" }}>Reach out to a trusted colleague, friend, or family member.</p>
+          </div>
+          <div style={{ padding: 12, borderRadius: 12, background: "rgba(255,246,232,0.75)", border: "1px solid rgba(168,95,46,0.14)" }}>
+            <strong>Need immediate help?</strong>
+            <p style={{ color: "var(--muted)", fontSize: 13, margin: "5px 0 0" }}>Contact local emergency services or an on-duty welfare professional if you are in immediate danger.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 /* =========================
    Main App
    ========================= */
 
 export default function App() {
-  const [showDashboard, setShowDashboard] = useState(true);
-  const [authUser, setAuthUser] = useState(null);
+  const [showDashboard, setShowDashboard] = useState(false);
+  const [authUser, setAuthUser] = useState(() => {
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("authUser");
+
+    if (!token || !storedUser) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedUser);
+    } catch {
+      localStorage.removeItem("authUser");
+      return null;
+    }
+  });
   
   // UI state: which dashboard tab to show
-  // "overview" = general preview, "enter" = Enter Platform cards, "welfare" = welfare dashboard
+  // "overview" = home/authenticated personnel view, "welfare" = welfare dashboard
   const [dashboardTab, setDashboardTab] = useState("overview");
-  // When user clicks a role card inside Enter Platform, store selection
+  // Tracks the selected authenticated platform role
   const [platformSelection, setPlatformSelection] = useState(null);
 
   // AI prediction state
-  const [predictionResult, setPredictionResult] = useState(null);
+  const [predictionResult, setPredictionResult] = useState(() => {
+    const cachedResult = localStorage.getItem("latestAssessment");
+    if (!cachedResult) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(cachedResult);
+    } catch {
+      localStorage.removeItem("latestAssessment");
+      return null;
+    }
+  });
   const [predictionLoading, setPredictionLoading] = useState(false);
   const [predictionError, setPredictionError] = useState("");
+  const [completedGoals, setCompletedGoals] = useState(() => {
+    const storedGoals = localStorage.getItem("dailyGoals");
+    if (!storedGoals) {
+      return {};
+    }
+
+    try {
+      return JSON.parse(storedGoals);
+    } catch {
+      localStorage.removeItem("dailyGoals");
+      return {};
+    }
+  });
+
+  function toggleDailyGoal(goalId) {
+    setCompletedGoals((currentGoals) => {
+      const nextGoals = {
+        ...currentGoals,
+        [goalId]: !currentGoals[goalId],
+      };
+      localStorage.setItem("dailyGoals", JSON.stringify(nextGoals));
+      return nextGoals;
+    });
+  }
+
+  useEffect(() => {
+    if (!authUser || authUser.role !== "personnel") {
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return;
+    }
+
+    fetch(`${API_BASE_URL}/personnel/latest-assessment`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(async (response) => {
+        if (response.status === 404) {
+          return null;
+        }
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || "Unable to load your latest assessment");
+        }
+        return data;
+      })
+      .then((data) => {
+        if (data) {
+          setPredictionResult(data);
+          localStorage.setItem("latestAssessment", JSON.stringify(data));
+        }
+      })
+      .catch((error) => {
+        console.error("Latest assessment error:", error);
+      });
+  }, [authUser]);
 
   async function getPrediction(personnelData) {
     setPredictionLoading(true);
@@ -517,7 +702,7 @@ export default function App() {
         throw new Error("Please login before using the AI prediction service.");
       }
 
-      const response = await fetch("https://manraksha.onrender.com/predict", {
+      const response = await fetch(`${API_BASE_URL}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -537,6 +722,7 @@ export default function App() {
 
       const result = await response.json();
       setPredictionResult(result);
+      localStorage.setItem("latestAssessment", JSON.stringify(result));
       return result;
     } catch (error) {
       console.error("Prediction error:", error);
@@ -549,61 +735,40 @@ export default function App() {
     }
   }
 
-  // realistic 30-day projection (deterministic)
-  const raw = (() => {
-    const arr = [];
-    const seed = 12345;
-    let rnd = seed;
-    function rand() {
-      rnd = (rnd * 9301 + 49297) % 233280;
-      return rnd / 233280;
-    }
-    for (let i = 0; i < 30; i++) {
-      const weekly = Math.sin((i / 7) * Math.PI * 2) * 3;
-      const trend = i * 0.45;
-      const noise = (rand() - 0.5) * 4;
-      const value = 45 + weekly + trend + noise;
-      arr.push(Math.round(value * 10) / 10);
-    }
-    return arr;
-  })();
-
-  const projection = smoothArray(raw, 5).map((v) => Math.round(v * 10) / 10);
-
-  const topFactors = [
-    { name: "Prolonged deployment", impact: "+18%" },
-    { name: "Sleep disruption", impact: "+12%" },
-    { name: "Reduced social interaction", impact: "+9%" },
-  ];
-
-  // Demo priority/explainable lists used by WelfareOfficerDashboardInline
-  window.priorityList = window.priorityList || [
-    { id: "P1042", risk: "Moderate", reason: "Deployment duration" },
-    { id: "P1087", risk: "Elevated", reason: "Night-duty frequency" },
-    { id: "P1121", risk: "Elevated", reason: "Workload variation" },
-    { id: "P1154", risk: "Moderate", reason: "Leave gap" },
-  ];
-  window.explainable = window.explainable || [
-    { name: "Prolonged deployment", impact: "+18%" },
-    { name: "Night-duty frequency", impact: "+14%" },
-    { name: "Workload variation", impact: "+12%" },
-  ];
-
-  
-  
+  const probabilities = predictionResult?.probabilities;
+  const riskScore = probabilities
+    ? Math.round((probabilities.group_1 * 25 + probabilities.group_2 * 60 + probabilities.group_3 * 90) * 10) / 10
+    : null;
+  const projection = riskScore === null ? [] : Array(30).fill(riskScore);
+  const topFactors = predictionResult?.top_contributors?.slice(0, 3).map((item) => ({
+    name: item.feature,
+    impact: item.direction,
+  })) || [];
 
   function handleLogin(user) {
+    localStorage.setItem("authUser", JSON.stringify(user));
     setAuthUser(user);
+    setPlatformSelection(user.role);
+    setDashboardTab(
+      user.role === "personnel"
+        ? "enter"
+        : user.role === "admin"
+          ? "admin"
+          : "overview"
+    );
+    setShowDashboard(true);
   }
-
   function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("authUser");
+    localStorage.removeItem("latestAssessment");
     setAuthUser(null);
     // return to overview on logout
     setDashboardTab("overview");
     setPlatformSelection(null);
   }
 
-  /* ---------- Dashboard view (Overview + Enter Platform + Welfare) ---------- */
+  /* ---------- Dashboard view ---------- */
   if (showDashboard) {
     return (
       <div className="app">
@@ -629,14 +794,14 @@ export default function App() {
 
               {!authUser ? (
                  <button
-    className="primary-button"
-    onClick={() => {
-      setDashboardTab("overview");
-      setPlatformSelection(null);
-    }}
-  >
-    Login / Sign up
-  </button>
+  className="primary-button"
+  onClick={() => {
+    setDashboardTab("overview");
+    setPlatformSelection(null);
+  }}
+>
+  Login / Sign up
+</button>
               ) : (
                 <>
                   <div style={{ color: "var(--muted)", fontSize: 13 }}>{authUser.name} ({authUser.role})</div>
@@ -654,44 +819,16 @@ export default function App() {
             </div>
           </nav>
 
-          {/* Tabs: Overview | Enter Platform */}
-          <div style={{ width: "90%", maxWidth: 1200, margin: "18px auto 0", display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button
-                className={dashboardTab === "overview" ? "primary-button" : "secondary-button"}
-                onClick={() => { setDashboardTab("overview"); setPlatformSelection(null); }}
-              >
-                Overview
-              </button>
-
-              <button
-                className={dashboardTab === "enter" ? "primary-button" : "secondary-button"}
-                onClick={() => { setDashboardTab("enter"); setPlatformSelection(null); }}
-              >
-                Enter Platform
-              </button>
-            </div>
-
-            <div style={{ marginLeft: "auto", color: "var(--muted)" }}>
-  {dashboardTab === "overview"
-    ? authUser
-      ? "Personnel welfare dashboard"
-      : "Login to access the platform"
-    : "Choose a role to enter the platform"}
-</div>
-          </div>
-
           {/* Tab content */}
           <div style={{ marginTop: 12 }}>
             {dashboardTab === "enter" ? (
-              // Enter Platform: show three role cards; clicking Welfare Officer opens welfare dashboard
+              // Personnel assessment view
               <div className="dashboard" style={{ paddingTop: 12 }}>
                 <div style={{ width: "90%", maxWidth: 1200, margin: "0 auto 18px" }}>
-                  <h1 style={{ margin: "8px 0 6px" }}>Enter Platform</h1>
-                  <p style={{ margin: 0, color: "var(--muted)" }}>Select your role to continue into the platform</p>
+                  <h1 style={{ margin: "8px 0 6px" }}>Personnel Assessment</h1>
                 </div>
 
-                <div style={{ width: "90%", maxWidth: 1200, margin: "18px auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
+                <div style={{ display: "none" }}>
                   {/* Personnel card */}
                   <div className="role-card" style={{ padding: 22 }}>
                     <div className="role-icon" style={{ background: "#F3E8FF", color: "#6B2FA3" }}>👤</div>
@@ -703,11 +840,12 @@ export default function App() {
                       <button
   className="primary-button"
   onClick={() => {
-    setAuthUser({
-      name: "Personnel",
-      email: "personnel@manraksh.demo",
-      role: "personnel",
-    });
+    if (!localStorage.getItem("token")) {
+      setDashboardTab("overview");
+      setShowDashboard(false);
+      return;
+    }
+
     setPlatformSelection("personnel");
     setDashboardTab("enter");
   }}
@@ -752,10 +890,10 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Platform selection result area */}
+                {/* Role dashboard content */}
                 <div style={{ width: "90%", maxWidth: 1200, margin: "18px auto" }}>
                   {platformSelection === "welfare" ? (
-                    // Show Welfare Officer dashboard inside Enter Platform flow
+                    // Welfare Officer dashboard content
                     <div>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <h2 style={{ margin: 0 }}>Welfare Officer — Workspace</h2>
@@ -1009,6 +1147,7 @@ export default function App() {
                     </div>
                   )}
                 </div>
+                {platformSelection === "personnel" && <PersonnelSupportAndGoals />}
               </div>
             ) : dashboardTab === "welfare" ? (
   // Direct Welfare Officer tab (full page)
@@ -1042,7 +1181,7 @@ export default function App() {
           <div className="admin-stat-icon personnel-icon">👥</div>
           <span className="admin-stat-label">PERSONNEL</span>
         </div>
-        <div className="admin-stat-value">248</div>
+        <div className="admin-stat-value">{DASHBOARD_DATA.personnel_count}</div>
         <div className="admin-stat-description">
           Registered personnel
         </div>
@@ -1053,7 +1192,7 @@ export default function App() {
           <div className="admin-stat-icon officer-icon">🛡️</div>
           <span className="admin-stat-label">WELFARE OFFICERS</span>
         </div>
-        <div className="admin-stat-value">18</div>
+        <div className="admin-stat-value">{DASHBOARD_DATA.welfare_officer_count}</div>
         <div className="admin-stat-description">
           Active officers
         </div>
@@ -1064,7 +1203,7 @@ export default function App() {
           <div className="admin-stat-icon active-icon">✓</div>
           <span className="admin-stat-label">ACTIVE USERS</span>
         </div>
-        <div className="admin-stat-value">231</div>
+        <div className="admin-stat-value">{DASHBOARD_DATA.active_user_count}</div>
         <div className="admin-stat-description">
           Currently active
         </div>
@@ -1325,15 +1464,21 @@ export default function App() {
                 <small>CURRENT PROJECTION</small>
 
                 <strong style={{ fontSize: 28 }}>
-                  {projection[projection.length - 1]}%
+                  {riskScore === null ? "—" : `${riskScore}%`}
                 </strong>
               </div>
             </div>
           </div>
 
-          <div style={{ marginTop: 8 }}>
-            <LineChart data={projection} />
-          </div>
+          {predictionResult ? (
+            <div style={{ marginTop: 8 }}>
+              <LineChart data={projection} />
+            </div>
+          ) : (
+            <p style={{ marginTop: 18, color: "var(--muted)" }}>
+              Submit the wellbeing assessment to load your backend risk projection.
+            </p>
+          )}
 
           <div
             className="chart-labels"
@@ -1378,7 +1523,7 @@ export default function App() {
             className="factors"
             style={{ marginTop: 8 }}
           >
-            {topFactors.map((f, idx) => (
+            {topFactors.length > 0 ? topFactors.map((f, idx) => (
               <div
                 key={idx}
                 className="factor"
@@ -1388,16 +1533,22 @@ export default function App() {
                   {f.name}
                 </div>
 
-                <div
-                  style={{
-                    color: "var(--blue)",
-                    fontWeight: 800,
-                  }}
-                >
-                  {f.impact}
-                </div>
+                {f.impact && (
+                  <div
+                    style={{
+                      color: "var(--blue)",
+                      fontWeight: 800,
+                    }}
+                  >
+                    {f.impact}
+                  </div>
+                )}
               </div>
-            ))}
+            )) : (
+              <p style={{ color: "var(--muted)" }}>
+                Your backend assessment factors will appear here after analysis.
+              </p>
+            )}
           </div>
 
           <div style={{ marginTop: 12 }}>
@@ -1409,12 +1560,9 @@ export default function App() {
               className="ai-description"
               style={{ marginTop: 6 }}
             >
-              The model indicates a steady upward trend
-              in aggregated risk driven primarily by
-              prolonged deployments and sleep disruption
-              signals. Recommend confidential outreach
-              for flagged personnel and anonymized case
-              review by authorized welfare officers.
+              {predictionResult
+                ? `The backend model classified your latest assessment as ${predictionResult.group}. Review the contributing factors above and use this result as advisory support for a human-led welfare conversation.`
+                : "Your backend model result and advisory insight will appear here after you submit the wellbeing assessment."}
             </p>
 
             <div
@@ -1723,6 +1871,98 @@ export default function App() {
             </button>
           </div>
         </div>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: 18,
+          marginTop: 22,
+        }}
+      >
+        <section className="dashboard-card" style={{ padding: 20 }}>
+          <small>SELF-CARE PLAN</small>
+          <h2 style={{ margin: "6px 0 8px" }}>Daily goals</h2>
+          <p style={{ color: "var(--muted)", marginTop: 0 }}>
+            Small, practical steps to support your wellbeing today.
+          </p>
+
+          <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+            {DAILY_GOALS.map((goal) => (
+              <button
+                key={goal.id}
+                type="button"
+                onClick={() => toggleDailyGoal(goal.id)}
+                aria-pressed={Boolean(completedGoals[goal.id])}
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  alignItems: "flex-start",
+                  textAlign: "left",
+                  padding: 12,
+                  borderRadius: 12,
+                  border: "1px solid rgba(44,94,98,0.12)",
+                  background: completedGoals[goal.id] ? "rgba(207,239,242,0.55)" : "rgba(255,255,255,0.9)",
+                  cursor: "pointer",
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  style={{
+                    minWidth: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    border: "2px solid var(--accent)",
+                    background: completedGoals[goal.id] ? "var(--accent)" : "transparent",
+                    color: "white",
+                    display: "grid",
+                    placeItems: "center",
+                    fontSize: 12,
+                    fontWeight: 700,
+                  }}
+                >
+                  {completedGoals[goal.id] ? "✓" : ""}
+                </span>
+                <span>
+                  <strong style={{ display: "block" }}>{goal.title}</strong>
+                  <span style={{ display: "block", color: "var(--muted)", fontSize: 13, marginTop: 3 }}>
+                    {goal.description}
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="dashboard-card" style={{ padding: 20 }}>
+          <small>CONFIDENTIAL SUPPORT</small>
+          <h2 style={{ margin: "6px 0 8px" }}>Support</h2>
+          <p style={{ color: "var(--muted)", marginTop: 0 }}>
+            You do not have to manage difficult moments alone. Choose the option that feels comfortable.
+          </p>
+
+          <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+            <div style={{ padding: 12, borderRadius: 12, background: "rgba(255,255,255,0.9)", border: "1px solid rgba(44,94,98,0.08)" }}>
+              <strong>Talk to a welfare officer</strong>
+              <p style={{ color: "var(--muted)", fontSize: 13, margin: "5px 0 0" }}>
+                Request a confidential conversation about your wellbeing or workload.
+              </p>
+            </div>
+            <div style={{ padding: 12, borderRadius: 12, background: "rgba(255,255,255,0.9)", border: "1px solid rgba(44,94,98,0.08)" }}>
+              <strong>Use peer support</strong>
+              <p style={{ color: "var(--muted)", fontSize: 13, margin: "5px 0 0" }}>
+                Reach out to a trusted colleague, friend, or family member.
+              </p>
+            </div>
+            <div style={{ padding: 12, borderRadius: 12, background: "rgba(255,246,232,0.75)", border: "1px solid rgba(168,95,46,0.14)" }}>
+              <strong>Need immediate help?</strong>
+              <p style={{ color: "var(--muted)", fontSize: 13, margin: "5px 0 0" }}>
+                Contact your local emergency service or an on-duty welfare professional if you are in immediate danger.
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
 
       <footer style={{ marginTop: 28 }}>
