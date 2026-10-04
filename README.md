@@ -262,7 +262,11 @@ flowchart TD
 The system follows a continuous pipeline from data collection to human-led welfare support.
 
 ```mermaid
-flowchart LR
+flowchart TD
+
+    %% =====================================================
+    %% CORE WORKFLOW
+    %% =====================================================
 
     C["Data Collection"]
     P["Preprocessing"]
@@ -274,6 +278,10 @@ flowchart LR
     H["Human Review"]
     W["Welfare Support"]
 
+    %% =====================================================
+    %% PRIMARY WORKFLOW
+    %% =====================================================
+
     C --> P
     P --> F
     F --> M
@@ -282,6 +290,24 @@ flowchart LR
     X --> A
     A --> H
     H --> W
+
+
+    %% =====================================================
+    %% FORMAL ARCHITECTURE-STYLE COLOURING
+    %% =====================================================
+
+    classDef main fill:#EAF3FF,stroke:#1F5A94,stroke-width:1.5px,color:#123B5D;
+    classDef analysis fill:#D7E9FF,stroke:#174A7A,stroke-width:2px,color:#0D3152;
+    classDef outcome fill:#F4F8FC,stroke:#3D6F9E,stroke-width:1.5px,color:#123B5D;
+
+    %% Core processing
+    class C,P,F main;
+
+    %% AI / Decision stages
+    class M,R,X,A,H analysis;
+
+    %% Final support stage
+    class W outcome;
 ```
 
 ### Workflow Stages
