@@ -67,63 +67,83 @@ The system does **not** treat an AI prediction as a medical diagnosis. Its purpo
 # Solution Architecture
 
 ```mermaid
-flowchart TB
+flowchart TD
 
-    subgraph DATA["1. DATA COLLECTION"]
-        D1["Personnel Profile Data"]
-        D2["Duty & Workload Data"]
-        D3["Leave & Deployment Data"]
-        D4["Wellness / Self-Assessment"]
-        D5["Operational & Behavioural Indicators"]
-    end
+    %% =====================================================
+    %% 1. DATA COLLECTION
+    %% =====================================================
 
-    subgraph SECURITY["2. SECURE DATA INGESTION"]
-        S1["Data Validation"]
-        S2["Anonymisation / Pseudonymisation"]
-        S3["Authentication & Access Control"]
-    end
+    D1["Personnel Profile Data"]
+    D2["Duty & Workload Data"]
+    D3["Leave & Deployment Data"]
+    D4["Wellness / Self-Assessment"]
+    D5["Operational & Behavioural Indicators"]
 
-    subgraph PROCESSING["3. DATA PROCESSING"]
-        P1["Data Cleaning"]
-        P2["Missing Value Handling"]
-        P3["Normalisation"]
-        P4["Feature Engineering"]
-        P5["Pattern Extraction"]
-    end
+    %% =====================================================
+    %% 2. SECURE DATA INGESTION
+    %% =====================================================
 
-    subgraph ML["4. AI / ML ENGINE"]
-        M1["Predictive Model"]
-        M2["Risk Classification"]
-        M3["Explainable AI"]
-        M4["Confidence & Pattern Analysis"]
-    end
+    S1["Data Validation"]
+    S2["Anonymisation / Pseudonymisation"]
+    S3["Authentication & Access Control"]
 
-    subgraph WARNING["5. EARLY-WARNING SYSTEM"]
-        W1["Risk Level"]
-        W2["Contributing Factors"]
-        W3["Early-Warning Alert"]
-        W4["Welfare Recommendation"]
-    end
+    %% =====================================================
+    %% 3. DATA PROCESSING
+    %% =====================================================
 
-    subgraph APPLICATION["6. APPLICATION"]
-        A1["Personnel Dashboard"]
-        A2["Wellness Check-In"]
-        A3["Welfare Dashboard"]
-        A4["Support Resources"]
-    end
+    P1["Data Cleaning"]
+    P2["Missing Value Handling"]
+    P3["Normalisation"]
+    P4["Feature Engineering"]
+    P5["Pattern Extraction"]
 
-    subgraph HUMAN["7. HUMAN OVERSIGHT"]
-        H1["Authorised Human Review"]
-        H2["Welfare Decision"]
-        H3["Human-Led Intervention"]
-    end
+    %% =====================================================
+    %% 4. AI / ML ENGINE
+    %% =====================================================
 
-    subgraph MONITORING["8. MONITORING & GOVERNANCE"]
-        G1["Audit Logs"]
-        G2["Model Performance Monitoring"]
-        G3["Data Drift Monitoring"]
-        G4["Model Improvement"]
-    end
+    M1["Predictive Model"]
+    M2["Risk Classification"]
+    M3["Explainable AI"]
+    M4["Confidence & Pattern Analysis"]
+
+    %% =====================================================
+    %% 5. EARLY-WARNING SYSTEM
+    %% =====================================================
+
+    W1["Risk Level"]
+    W2["Contributing Factors"]
+    W3["Early-Warning Alert"]
+    W4["Welfare Recommendation"]
+
+    %% =====================================================
+    %% 6. APPLICATION
+    %% =====================================================
+
+    A1["Personnel Dashboard"]
+    A2["Wellness Check-In"]
+    A3["Welfare Dashboard"]
+    A4["Support Resources"]
+
+    %% =====================================================
+    %% 7. HUMAN OVERSIGHT
+    %% =====================================================
+
+    H1["Authorised Human Review"]
+    H2["Welfare Decision"]
+    H3["Human-Led Intervention"]
+
+    %% =====================================================
+    %% 8. MONITORING & GOVERNANCE
+    %% =====================================================
+
+    G1["Audit Logs"]
+    G2["Model Performance Monitoring"]
+    G3["Data Drift Monitoring"]
+    G4["Model Improvement"]
+
+    %% =====================================================
+    %% DATA COLLECTION → SECURE INGESTION
+    %% =====================================================
 
     D1 --> S1
     D2 --> S1
@@ -133,6 +153,11 @@ flowchart TB
 
     S1 --> S2
     S2 --> S3
+
+    %% =====================================================
+    %% SECURE INGESTION → DATA PROCESSING
+    %% =====================================================
+
     S3 --> P1
 
     P1 --> P2
@@ -140,33 +165,94 @@ flowchart TB
     P3 --> P4
     P4 --> P5
 
+    %% =====================================================
+    %% DATA PROCESSING → AI / ML
+    %% =====================================================
+
     P5 --> M1
+
     M1 --> M2
     M1 --> M3
     M3 --> M4
 
+    %% =====================================================
+    %% AI / ML → EARLY WARNING
+    %% =====================================================
+
     M2 --> W1
     M3 --> W2
     M4 --> W3
+
     W1 --> W3
     W2 --> W3
     W3 --> W4
+
+    %% =====================================================
+    %% EARLY WARNING → APPLICATION
+    %% =====================================================
 
     W1 --> A1
     W4 --> A2
     W4 --> A4
     W3 --> A3
 
+    %% =====================================================
+    %% APPLICATION → HUMAN OVERSIGHT
+    %% =====================================================
+
     A3 --> H1
     A1 --> H1
+
     H1 --> H2
     H2 --> H3
+
+    %% =====================================================
+    %% HUMAN OVERSIGHT → MONITORING
+    %% =====================================================
 
     H3 --> G1
     G1 --> G2
     G2 --> G3
     G3 --> G4
+
+    %% =====================================================
+    %% CONTINUOUS MODEL IMPROVEMENT
+    %% =====================================================
+
     G4 --> M1
+
+
+    %% =====================================================
+    %% FORMAL ARCHITECTURE-STYLE COLOURING
+    %% =====================================================
+
+    classDef main fill:#EAF3FF,stroke:#1F5A94,stroke-width:1.5px,color:#123B5D;
+    classDef analysis fill:#D7E9FF,stroke:#174A7A,stroke-width:2px,color:#0D3152;
+    classDef outcome fill:#F4F8FC,stroke:#3D6F9E,stroke-width:1.5px,color:#123B5D;
+
+    %% Data Collection
+    class D1,D2,D3,D4,D5 main;
+
+    %% Secure Data Ingestion
+    class S1,S2,S3 main;
+
+    %% Data Processing
+    class P1,P2,P3,P4,P5 main;
+
+    %% AI / ML Engine
+    class M1,M2,M3,M4 analysis;
+
+    %% Early-Warning System
+    class W1,W2,W3,W4 analysis;
+
+    %% Application
+    class A1,A2,A3,A4 outcome;
+
+    %% Human Oversight
+    class H1,H2,H3 analysis;
+
+    %% Monitoring & Governance
+    class G1,G2,G3,G4 outcome;
 ```
 
 ---
